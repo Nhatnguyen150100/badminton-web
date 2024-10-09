@@ -11,6 +11,7 @@ dotenv.config();
 
 import connectDB from "./config/connectDB";
 import authRouter from "./routes/authRouter";
+import badmintonCourtRouter from "./routes/badmintonCourtRouter";
 const { default: loggerWinston } = require("./config/winston");
 
 connectDB.connect();
@@ -47,6 +48,7 @@ app.use(express.static(join(__dirname, "public")));
  * @toto router setup
  */
 app.use("/v1/auth", authRouter);
+app.use("/v1/court", badmintonCourtRouter);
 
 app.listen(process.env.PORT || 3000, () => {
   loggerWinston.info("server listening on port: " + (process.env.PORT || 3000));
