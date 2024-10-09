@@ -13,13 +13,11 @@ badmintonCourtRouter.post(
 
 badmintonCourtRouter.get(
   "/",
-  tokenMiddleware.verifyToken,
   badmintonCourtController.getListBadmintonCourt
 );
 
 badmintonCourtRouter.get(
   "/:id",
-  tokenMiddleware.verifyToken,
   badmintonCourtController.getBadmintonCourt
 );
 
