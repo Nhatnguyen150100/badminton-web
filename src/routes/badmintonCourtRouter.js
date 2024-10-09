@@ -26,15 +26,13 @@ badmintonCourtRouter.put(
 
 badmintonCourtRouter.put(
   "/status/:id",
-  tokenMiddleware.verifyToken,
-  badmintonCourtMiddleware.checkCourtOwner,
+  tokenMiddleware.verifyTokenAdmin,
   badmintonCourtController.updateBadmintonCourt
 );
 
 badmintonCourtRouter.delete(
   "/:id",
-  tokenMiddleware.verifyToken,
-  badmintonCourtMiddleware.checkCourtOwner,
+  tokenMiddleware.verifyTokenAdmin,
   badmintonCourtController.deleteBadmintonCourt
 );
 
