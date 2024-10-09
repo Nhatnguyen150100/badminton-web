@@ -32,7 +32,7 @@ const authService = {
           });
         }
       } catch (error) {
-        logger.error(error);
+        logger.error(error.message);
         reject(error);
       }
     });
@@ -75,7 +75,7 @@ const authService = {
           });
         }
       } catch (error) {
-        logger.error(error);
+        logger.error(error.message);
         reject(error);
       }
     });

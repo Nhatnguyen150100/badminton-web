@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class BadmintonCourt extends Model {
     /**
@@ -20,35 +18,40 @@ module.exports = (sequelize, DataTypes) => {
         as: "courtNumbers",
         sourceKey: "id",
         onDelete: "CASCADE",
-        hooks: true
+        hooks: true,
       });
       BadmintonCourt.hasMany(models.TimeBooking, {
         foreignKey: "badmintonCourtId",
         as: "timeBookings",
         sourceKey: "id",
         onDelete: "CASCADE",
-        hooks: true
+        hooks: true,
       });
     }
   }
-  BadmintonCourt.init({
-    id: {
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      type: DataTypes.UUID,
+  BadmintonCourt.init(
+    {
+      id: {
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        type: DataTypes.UUID,
+      },
+      name: DataTypes.STRING,
+      district: DataTypes.STRING,
+      ward: DataTypes.STRING,
+      address: DataTypes.STRING,
+      lang: DataTypes.INTEGER,
+      lat: DataTypes.INTEGER,
+      userId: DataTypes.UUID,
+      imageCourt: DataTypes.STRING,
+      description: DataTypes.STRING,
+      status: DataTypes.STRING,
     },
-    name: DataTypes.STRING,
-    address: DataTypes.STRING,
-    lang: DataTypes.INTEGER,
-    lat: DataTypes.INTEGER,
-    userId: DataTypes.UUID,
-    imageCourt: DataTypes.STRING,
-    description: DataTypes.STRING,
-    status: DataTypes.STRING
-  }, {
-    sequelize,
-    modelName: 'BadmintonCourt',
-  });
+    {
+      sequelize,
+      modelName: "BadmintonCourt",
+    }
+  );
   return BadmintonCourt;
 };

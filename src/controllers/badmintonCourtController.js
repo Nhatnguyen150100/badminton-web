@@ -1,9 +1,17 @@
+import badmintonCourtService from "../services/BadmintonCourtService";
+
 const { DEFINE_STATUS } = require("../constants/status");
-const {
-  default: badmintonCourtService,
-} = require("../services/BadmintonCourtService");
 
 const badmintonCourtController = {
+  getListBadmintonCourt: async (req, res) => {
+    try {
+      const { data, message } =
+        await badmintonCourtService.getListBadmintonCourt(req.query);
+      res.status(200).json({ message, data });
+    } catch (error) {
+      res.status(500).json({ message: "server error" });
+    }
+  },
   createBadmintonCourt: async (req, res) => {
     try {
       const { userId, ...resData } = req.body;
@@ -28,9 +36,11 @@ const badmintonCourtController = {
   updateBadmintonCourt: async (req, res) => {
     try {
       const { id } = req.params;
-      const { data, message } =
-        await badmintonCourtService.updateBadmintonCourt(id, req.body);
-      res.status(200).json({ message, data });
+      const { message } = await badmintonCourtService.updateBadmintonCourt(
+        id,
+        req.body
+      );
+      res.status(200).json({ message });
     } catch (error) {
       res.status(500).json({ message: "server error" });
     }

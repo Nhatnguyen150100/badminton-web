@@ -14,7 +14,9 @@ const onRemoveParams = (params, arrayValueAccepted = []) => {
   const handleRemoveNullUndefined = (obj) => {
     if (!obj) return {};
     return Object.fromEntries(
-      Object.entries(obj).filter(([_, value]) => Boolean(value) || onCheckAcceptedValue(value))
+      Object.entries(obj).filter(
+        ([_, value]) => Boolean(value) || onCheckAcceptedValue(value)
+      )
     );
   };
 

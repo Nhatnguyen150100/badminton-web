@@ -19,6 +19,8 @@ module.exports = {
           id: "bf08afd0-111a-47c8-99db-2b2699055dde",
           userId: "d511aeab-f46d-408c-a29d-55ad1855651a",
           name: "Sân cầu lông ABC",
+          district: "Quận Hoàng mai",
+          ward: "Phường Hoàng mai",
           address: "123 Đường XYZ, Quận 1, TP.HCM",
           lang: 10.762622,
           lat: 10.762622,

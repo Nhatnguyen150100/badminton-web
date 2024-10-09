@@ -12,6 +12,12 @@ badmintonCourtRouter.post(
 );
 
 badmintonCourtRouter.get(
+  "/",
+  tokenMiddleware.verifyToken,
+  badmintonCourtController.getListBadmintonCourt
+);
+
+badmintonCourtRouter.get(
   "/:id",
   tokenMiddleware.verifyToken,
   badmintonCourtController.getBadmintonCourt
@@ -27,7 +33,7 @@ badmintonCourtRouter.put(
 badmintonCourtRouter.put(
   "/status/:id",
   tokenMiddleware.verifyTokenAdmin,
-  badmintonCourtController.updateBadmintonCourt
+  badmintonCourtController.changeStatusBadmintonCourt
 );
 
 badmintonCourtRouter.delete(
@@ -35,6 +41,5 @@ badmintonCourtRouter.delete(
   tokenMiddleware.verifyTokenAdmin,
   badmintonCourtController.deleteBadmintonCourt
 );
-
 
 export default badmintonCourtRouter;

@@ -26,7 +26,9 @@ const tokenMiddleware = {
       return res.status(403).json({ message: "Invalid token" });
     }
     if (user.role !== "ADMIN") {
-      return res.status(403).json({ message: "Unauthorized access" });
+      return res
+        .status(403)
+        .json({ message: "Unauthorized access for user (only admin)" });
     }
     req.user = user;
     next();

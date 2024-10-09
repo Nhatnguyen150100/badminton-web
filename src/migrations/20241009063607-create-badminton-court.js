@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 
-const { DEFINE_STATUS } = require('../constants/status');
+const { DEFINE_STATUS } = require("../constants/status");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('BadmintonCourts', {
+    await queryInterface.createTable("BadmintonCourts", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -13,16 +13,22 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       address: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+      },
+      district: {
+        type: Sequelize.STRING,
+      },
+      ward: {
+        type: Sequelize.STRING,
       },
       lang: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       lat: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       userId: {
         type: Sequelize.UUID,
@@ -36,27 +42,27 @@ module.exports = {
         },
       },
       imageCourt: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       description: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       status: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: DEFINE_STATUS.PENDING_APPROVAL
+        defaultValue: DEFINE_STATUS.PENDING_APPROVAL,
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('BadmintonCourts');
-  }
+    await queryInterface.dropTable("BadmintonCourts");
+  },
 };

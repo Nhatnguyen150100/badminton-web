@@ -17,7 +17,7 @@ const authController = {
         data: { ...data, accessToken: accessToken },
       });
     } catch (error) {
-      logger.error(error);
+      logger.error(error.message);
       res.status(500).json({ message: "server error" });
     }
   },
@@ -30,7 +30,7 @@ const authController = {
       }
       res.status(201).json({ message, data });
     } catch (error) {
-      logger.error(error);
+      logger.error(error.message);
       res.status(500).json({ message: "server error" });
     }
   },

@@ -16,7 +16,7 @@ const badmintonCourtMiddleware = {
           .json({ message: "You are not authorized to access this court" });
       }
     } catch (error) {
-      logger.error(error);
+      logger.error(error.message);
       res.status(500).json({ message: "Server error" });
     }
   },
