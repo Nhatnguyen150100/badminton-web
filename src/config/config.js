@@ -3,7 +3,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const DEFAULT_CONFIG_DB = {
-  DB_DATABASE: "db_nihongo",
+  DB_DATABASE: "db_badminton_web",
   DB_USERNAME: "root",
   DB_PASSWORD: "",
   DB_HOST: "localhost",

@@ -12,12 +12,6 @@ const authService = {
           where: { email: email },
           raw: true,
         });
-        if (user.role === "USER") {
-          await db.LoginLog.create({
-            logTime: new Date(),
-            idUser: user.id,
-          });
-        }
         if (!user || Object.keys(user).length === 0) {
           resolve({
             data: null,

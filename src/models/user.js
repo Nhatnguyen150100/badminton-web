@@ -9,6 +9,20 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.hasMany(models.BadmintonCourt, {
+        foreignKey: "userId",
+        as: "badmintonCourt",
+        sourceKey: "id",
+        onDelete: "CASCADE",
+        hooks: true
+      });
+      User.hasMany(models.UserBooking, {
+        foreignKey: "userId",
+        as: "userBookings",
+        sourceKey: "id",
+        onDelete: "CASCADE",
+        hooks: true
+      });
     }
   }
   User.init(
@@ -22,7 +36,6 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       fullName: DataTypes.STRING,
       gender: DataTypes.STRING,
-      birthDay: DataTypes.DATE,
       phoneNumber: DataTypes.INTEGER,
       email: {
         type: DataTypes.STRING,
