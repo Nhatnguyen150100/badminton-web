@@ -13,23 +13,18 @@ module.exports = {
      * }], {});
      */
     await queryInterface.bulkInsert(
-      "Users",
+      "BadmintonCourts",
       [
         {
-          id: "d511aeab-f46d-408c-a29d-55ad1855651a",
-          email: "user1@gmail.com",
-          role: "USER",
-          password:
-            "$2b$10$6eXQVPv8SBbKvivehAXVWe/lotzezRfMWZ3oc82vfxHUYZnKp0gVG", // plain = password
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          id: "d511aeab-f46d-248c-a29d-55ad1855651a",
-          email: "admin@gmail.com",
-          role: "ADMIN",
-          password:
-            "$2b$10$6eXQVPv8SBbKvivehAXVWe/lotzezRfMWZ3oc82vfxHUYZnKp0gVG", // plain = password
+          id: "bf08afd0-111a-47c8-99db-2b2699055dde",
+          userId: "d511aeab-f46d-408c-a29d-55ad1855651a",
+          name: "Sân cầu lông ABC",
+          address: "123 Đường XYZ, Quận 1, TP.HCM",
+          lang: 10.762622,
+          lat: 10.762622,
+          imageCourt: "123e4567-e89b-12d3-a456-426614174001",
+          description: "Sân cầu lông rộng rãi, đầy đủ tiện nghi và ánh sáng.",
+          status: "PENDING_APPROVAL",
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -45,6 +40,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    return queryInterface.bulkDelete('Users', null, {});
+    return queryInterface.bulkDelete("BadmintonCourts", null, {});
   },
 };

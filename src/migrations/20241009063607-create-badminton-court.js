@@ -19,10 +19,10 @@ module.exports = {
         type: Sequelize.STRING
       },
       lang: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       lat: {
-        type: Sequelize.STRING
+        type: Sequelize.INTEGER
       },
       userId: {
         type: Sequelize.UUID,

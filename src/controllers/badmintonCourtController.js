@@ -6,10 +6,10 @@ const {
 const badmintonCourtController = {
   createBadmintonCourt: async (req, res) => {
     try {
-      const { userId, ...res } = req.body;
+      const { userId, ...resData } = req.body;
       const { data, message } =
-        await badmintonCourtService.createBadmintonCourt(userId, res);
-      res.status(201).json({ message, data });
+        await badmintonCourtService.createBadmintonCourt(userId, resData);
+      res.status(200).json({ message, data });
     } catch (error) {
       res.status(500).json({ message: "server error" });
     }
@@ -20,7 +20,7 @@ const badmintonCourtController = {
       const { data, message } = await badmintonCourtService.getBadmintonCourt(
         id
       );
-      res.status(201).json({ message, data });
+      res.status(200).json({ message, data });
     } catch (error) {
       res.status(500).json({ message: "server error" });
     }
@@ -39,13 +39,11 @@ const badmintonCourtController = {
     try {
       const { status } = req.body;
       if (!Object.values(DEFINE_STATUS).includes(status)) {
-        return res
-          .status(400)
-          .json({
-            message: `Invalid status, status include ${Object.values(
-              DEFINE_STATUS
-            ).join(" ,")}`,
-          });
+        return res.status(400).json({
+          message: `Invalid status, status include ${Object.values(
+            DEFINE_STATUS
+          ).join(" ,")}`,
+        });
       }
       const { id } = req.params;
       const { data, message } =

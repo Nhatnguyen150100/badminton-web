@@ -1,3 +1,5 @@
+import logger from "../config/winston";
+
 const { default: db } = require("../models");
 
 const badmintonCourtService = {
@@ -17,6 +19,7 @@ const badmintonCourtService = {
           message: "Badminton court not found",
         });
       } catch (error) {
+        logger.error(error);
         reject(error);
       }
     });
@@ -46,6 +49,7 @@ const badmintonCourtService = {
           message: "Failed to create badminton court",
         });
       } catch (error) {
+        logger.error(error);
         reject(error);
       }
     });
@@ -70,6 +74,7 @@ const badmintonCourtService = {
           message: "Failed to update badminton court",
         });
       } catch (error) {
+        logger.error(error);
         reject(error);
       }
     });
@@ -91,6 +96,7 @@ const badmintonCourtService = {
           message: "Failed to change status of badminton courts",
         });
       } catch (error) {
+        logger.error(error);
         reject(error);
       }
     });
@@ -113,6 +119,7 @@ const badmintonCourtService = {
           message: "Failed to delete badminton court",
         });
       } catch (error) {
+        logger.error(error);
         reject(error);
       }
     });
