@@ -1,16 +1,21 @@
+import { where } from "sequelize";
+
 const { default: logger } = require("../config/winston");
 const { default: db } = require("../models");
 const { default: onRemoveParams } = require("../utils/remove-params");
 
 const timeBookingService = {
-  getListTimeBookings: (data) => {
+  getListTimeBookings: (badmintonCourtId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
         const { page, limit, nameLike } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
-        let query = {};
+        let query = {
+          badmintonCourtId
+        };
         if (nameLike) {
           query = {
+            ...query,
             name: {
               [Op.like]: `%${nameLike}%`,
             },
@@ -47,7 +52,7 @@ const timeBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -62,13 +67,14 @@ const timeBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
-  updateTimeBooking: (timeBookingId, data) => {
+  updateTimeBooking: (timeBookingId, startTime, endTime) => {
     return new Promise(async (resolve, reject) => {
       try {
+        const data = { startTime, endTime };
         const timeBooking = await db.TimeBooking.findByPk(timeBookingId, {
           raw: true,
         });
@@ -77,13 +83,23 @@ const timeBookingService = {
             message: "Time booking not found",
           });
         }
-        await timeBooking.update(data);
-        resolve({
-          message: "Time booking updated successfully",
+        const updated = await db.TimeBooking.update(data, {
+          where: {
+            id: timeBookingId,
+          },
         });
+        if(updated) {
+          resolve({
+            message: "Time booking updated successfully",
+          });
+          return;
+        }
+        reject({
+          message: "Failed to update time booking",
+        })
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -96,13 +112,17 @@ const timeBookingService = {
             message: "Time booking not found",
           });
         }
-        await timeBooking.destroy();
+        await db.TimeBooking.destroy({
+          where: {
+            id: timeBookingId,
+          },
+        });
         resolve({
           message: "Time booking deleted successfully",
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },

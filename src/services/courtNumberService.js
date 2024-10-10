@@ -5,14 +5,17 @@ const { default: logger } = require("../config/winston");
 const { default: db } = require("../models");
 
 const courtNumberService = {
-  getListCourtNumber: (data) => {
+  getListCourtNumber: (badmintonCourtId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
         const { page, limit, nameLike } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
-        let query = {};
+        let query = {
+          badmintonCourtId
+        };
         if (nameLike) {
           query = {
+            ...query,
             name: {
               [Op.like]: `%${nameLike}%`,
             },
@@ -49,7 +52,7 @@ const courtNumberService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -64,7 +67,7 @@ const courtNumberService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -87,7 +90,7 @@ const courtNumberService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -116,7 +119,7 @@ const courtNumberService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -144,7 +147,7 @@ const courtNumberService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },

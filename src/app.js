@@ -13,7 +13,9 @@ import connectDB from "./config/connectDB";
 import authRouter from "./routes/authRouter";
 import badmintonCourtRouter from "./routes/badmintonCourtRouter";
 import courtNumberRouter from "./routes/courtNumberRouter";
+import scheduleRouter from "./routes/scheduleRouter";
 import timeBookingRouter from "./routes/timeBookingRouter";
+import userBookingRouter from "./routes/userBookingRouter";
 const { default: loggerWinston } = require("./config/winston");
 
 connectDB.connect();
@@ -53,6 +55,8 @@ app.use("/v1/auth", authRouter);
 app.use("/v1/court", badmintonCourtRouter);
 app.use("/v1/court-number", courtNumberRouter);
 app.use("/v1/time-booking", timeBookingRouter);
+app.use("/v1/schedule", scheduleRouter);
+app.use("/v1/user-booking", userBookingRouter);
 
 app.listen(process.env.PORT || 3000, () => {
   loggerWinston.info("server listening on port: " + (process.env.PORT || 3000));

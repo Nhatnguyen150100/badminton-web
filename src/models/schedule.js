@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Schedule.belongsTo(models.BadmintonCourt, {
         foreignKey: { name: "badmintonCourtId", allowNull: false },
+        as: 'badmintonCourt',
         targetKey: "id",
       });
       Schedule.belongsTo(models.TimeBooking, {
@@ -43,7 +44,7 @@ module.exports = (sequelize, DataTypes) => {
     courtNumberId: DataTypes.UUID,
     timeBookingId: DataTypes.UUID,
     appointmentDate: DataTypes.DATE,
-    const: DataTypes.INTEGER,
+    constBooking: DataTypes.INTEGER,
     status: DataTypes.STRING,
   }, {
     sequelize,

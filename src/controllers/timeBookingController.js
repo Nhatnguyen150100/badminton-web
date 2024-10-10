@@ -8,7 +8,7 @@ const timeBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   createTimeBooking: async (req, res) => {
@@ -21,7 +21,7 @@ const timeBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   updateTimeBooking: async (req, res) => {
@@ -35,16 +35,16 @@ const timeBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   deleteTimeBooking: async (req, res) => {
     try {
       const { id } = req.params;
-      const { data, message } = await timeBookingService.deleteTimeBooking(id);
-      res.status(200).json({ message, data });
+      const { message } = await timeBookingService.deleteTimeBooking(id);
+      res.status(200).json({ message });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
 };

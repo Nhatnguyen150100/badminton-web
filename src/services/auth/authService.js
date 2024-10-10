@@ -33,7 +33,7 @@ const authService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -53,7 +53,7 @@ const authService = {
         });
       } catch (error) {
         logger.error(error.parent);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -76,7 +76,7 @@ const authService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },

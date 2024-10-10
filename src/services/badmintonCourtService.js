@@ -1,6 +1,7 @@
 import { Op } from "sequelize";
 import logger from "../config/winston";
 import onRemoveParams from "../utils/remove-params";
+import { DEFINE_STATUS } from "../constants/status";
 
 const { default: db } = require("../models");
 
@@ -10,7 +11,9 @@ const badmintonCourtService = {
       try {
         const { page, limit, nameLike, district, ward } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
-        let query = {};
+        let query = {
+          status: DEFINE_STATUS.ACCEPTED
+        };
         if (nameLike) {
           query = {
             name: {
@@ -54,7 +57,7 @@ const badmintonCourtService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -75,7 +78,7 @@ const badmintonCourtService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -116,7 +119,7 @@ const badmintonCourtService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -139,7 +142,7 @@ const badmintonCourtService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -161,7 +164,7 @@ const badmintonCourtService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },
@@ -184,7 +187,7 @@ const badmintonCourtService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject(error);
+        reject({status: 400, message: error.message});
       }
     });
   },

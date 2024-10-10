@@ -49,7 +49,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE,
       },
-      const: {
+      constBooking: {
         type: Sequelize.INTEGER,
       },
       status: {

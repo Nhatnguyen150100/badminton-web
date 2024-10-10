@@ -8,7 +8,7 @@ const courtNumberController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   createCourtNumber: async (req, res) => {
@@ -20,7 +20,7 @@ const courtNumberController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   getCourtNumber: async (req, res) => {
@@ -29,7 +29,7 @@ const courtNumberController = {
       const { data, message } = await courtNumberService.getCourtNumber(id);
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   updateCourtNumber: async (req, res) => {
@@ -42,7 +42,7 @@ const courtNumberController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   deleteCourtNumber: async (req, res) => {
@@ -51,7 +51,7 @@ const courtNumberController = {
       const { data, message } = await courtNumberService.deleteCourtNumber(id);
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
 };

@@ -9,7 +9,7 @@ const badmintonCourtController = {
         await badmintonCourtService.getListBadmintonCourt(req.query);
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   createBadmintonCourt: async (req, res) => {
@@ -19,7 +19,7 @@ const badmintonCourtController = {
         await badmintonCourtService.createBadmintonCourt(userId, resData);
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   getBadmintonCourt: async (req, res) => {
@@ -30,7 +30,7 @@ const badmintonCourtController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   updateBadmintonCourt: async (req, res) => {
@@ -42,7 +42,7 @@ const badmintonCourtController = {
       );
       res.status(200).json({ message });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   changeStatusBadmintonCourt: async (req, res) => {
@@ -60,7 +60,7 @@ const badmintonCourtController = {
         await badmintonCourtService.changeStatusBadmintonCourt(id, status);
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   deleteBadmintonCourt: async (req, res) => {
@@ -69,7 +69,7 @@ const badmintonCourtController = {
       const { message } = await badmintonCourtService.deleteBadmintonCourt(id);
       res.status(200).json({ message });
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
 };

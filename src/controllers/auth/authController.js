@@ -18,7 +18,7 @@ const authController = {
       });
     } catch (error) {
       logger.error(error.message);
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
   register: async (req, res) => {
@@ -31,7 +31,7 @@ const authController = {
       res.status(201).json({ message, data });
     } catch (error) {
       logger.error(error.message);
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
 };

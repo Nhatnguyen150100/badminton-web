@@ -11,7 +11,7 @@ const authMiddleware = {
       }
       next();
     } catch (error) {
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json({ message: error.message });
     }
   },
 };
