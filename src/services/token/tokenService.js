@@ -1,4 +1,4 @@
-"use-strict";
+"use strict";
 import jwt from "jsonwebtoken";
 import path from "path";
 import fs from "fs";
