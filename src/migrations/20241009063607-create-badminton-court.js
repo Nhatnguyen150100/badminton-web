@@ -1,7 +1,5 @@
 "use strict";
 
-const { DEFINE_STATUS } = require("../constants/status");
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -50,7 +48,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: DEFINE_STATUS.PENDING_APPROVAL,
+        defaultValue: "PENDING_APPROVAL",
       },
       createdAt: {
         allowNull: false,

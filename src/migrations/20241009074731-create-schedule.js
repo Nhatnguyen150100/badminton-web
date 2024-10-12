@@ -1,7 +1,5 @@
 "use strict";
 
-const { DEFINE_SCHEDULE_STATUS } = require('../constants/status');
-
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -55,7 +53,7 @@ module.exports = {
       status: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: DEFINE_SCHEDULE_STATUS.AVAILABLE
+        defaultValue: "AVAILABLE",
       },
       createdAt: {
         allowNull: false,

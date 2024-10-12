@@ -1,11 +1,9 @@
-'use strict';
-
-const { DEFINE_STATUS } = require('../constants/status');
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('UserBookings', {
+    await queryInterface.createTable("UserBookings", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -35,24 +33,24 @@ module.exports = {
         },
       },
       note: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       status: {
         type: Sequelize.STRING,
         allowNull: false,
-        defaultValue: DEFINE_STATUS.PENDING_APPROVAL
+        defaultValue: "PENDING_APPROVAL",
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('UserBookings');
-  }
+    await queryInterface.dropTable("UserBookings");
+  },
 };
