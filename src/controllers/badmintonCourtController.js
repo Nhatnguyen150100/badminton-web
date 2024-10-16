@@ -34,6 +34,7 @@ const badmintonCourtController = {
       );
       res.status(rs.status).json(rs);
     } catch (error) {
+      console.log("🚀 ~ createBadmintonCourt: ~ error:", error)
       res.status(error.status).json(error);
     }
   },

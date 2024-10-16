@@ -35,7 +35,7 @@ const authService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -59,7 +59,7 @@ const authService = {
         logger.error(error.parent);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -86,7 +86,7 @@ const authService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }

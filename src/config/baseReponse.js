@@ -17,14 +17,12 @@ export class BaseResponseList extends BaseResponse {
 
 export class BaseErrorResponse extends BaseResponse {
   constructor({ message }) {
-    super(null, message);
-    this.status = DEFINE_STATUS_RESPONSE.ERROR;
+    super({ status: DEFINE_STATUS_RESPONSE.ERROR, data: null, message });
   }
 }
 
 export class BaseSuccessResponse extends BaseResponse {
   constructor({ data, message }) {
-    super(data ?? null, message);
-    this.status = DEFINE_STATUS_RESPONSE.SUCCESS;
+    super({ status: DEFINE_STATUS_RESPONSE.SUCCESS, data, message });
   }
 }

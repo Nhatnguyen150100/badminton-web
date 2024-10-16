@@ -26,7 +26,7 @@ const scheduleService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -74,7 +74,7 @@ const scheduleService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -123,7 +123,7 @@ const scheduleService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -148,7 +148,7 @@ const scheduleService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -203,7 +203,7 @@ const scheduleService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }

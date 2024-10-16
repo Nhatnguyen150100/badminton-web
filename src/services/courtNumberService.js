@@ -55,7 +55,7 @@ const courtNumberService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -74,7 +74,7 @@ const courtNumberService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -101,7 +101,7 @@ const courtNumberService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -134,7 +134,7 @@ const courtNumberService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -166,7 +166,7 @@ const courtNumberService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }

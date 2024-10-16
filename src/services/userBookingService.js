@@ -22,7 +22,7 @@ const userBookingService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -98,7 +98,7 @@ const userBookingService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -181,7 +181,7 @@ const userBookingService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -229,7 +229,7 @@ const userBookingService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -256,7 +256,7 @@ const userBookingService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }

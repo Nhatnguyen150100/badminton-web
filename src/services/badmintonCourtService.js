@@ -67,7 +67,7 @@ const badmintonCourtService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -128,7 +128,7 @@ const badmintonCourtService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -153,7 +153,7 @@ const badmintonCourtService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -200,7 +200,7 @@ const badmintonCourtService = {
         logger.error(error.message);
         reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -230,7 +230,7 @@ const badmintonCourtService = {
         logger.error(error.message);
         return reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -257,7 +257,7 @@ const badmintonCourtService = {
         logger.error(error.message);
         return reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
@@ -284,7 +284,7 @@ const badmintonCourtService = {
         logger.error(error.message);
         return reject(
           new BaseErrorResponse({
-            error: error.message,
+            message: error.message,
           })
         );
       }
