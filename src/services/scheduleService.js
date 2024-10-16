@@ -4,6 +4,7 @@ import db from "../models";
 import dayjs from "dayjs";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import onRemoveParams from "../utils/remove-params";
+import { BaseErrorResponse } from "../config/baseReponse";
 dayjs.extend(customParseFormat);
 
 const scheduleService = {
@@ -23,7 +24,11 @@ const scheduleService = {
         resolve(false);
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -67,7 +72,11 @@ const scheduleService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -112,7 +121,11 @@ const scheduleService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -133,7 +146,11 @@ const scheduleService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -184,7 +201,11 @@ const scheduleService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },

@@ -8,7 +8,7 @@ const scheduleController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   createSchedule: async (req, res) => {
@@ -44,7 +44,7 @@ const scheduleController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   updatedSchedule: async (req, res) => {
@@ -70,7 +70,7 @@ const scheduleController = {
       const { message } = await scheduleService.deleteSchedule(id);
       res.status(200).json({ message });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
 };

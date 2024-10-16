@@ -16,7 +16,7 @@ const profileService = {
           {
             fullName,
             gender,
-            avatar,
+            avatar: avatar ?? '',
             phoneNumber,
           },
           {

@@ -1,4 +1,5 @@
 import { where } from "sequelize";
+import { BaseErrorResponse } from "../config/baseReponse";
 
 const { default: logger } = require("../config/winston");
 const { default: db } = require("../models");
@@ -52,7 +53,11 @@ const timeBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -67,7 +72,11 @@ const timeBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -99,7 +108,11 @@ const timeBookingService = {
         })
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -122,7 +135,11 @@ const timeBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },

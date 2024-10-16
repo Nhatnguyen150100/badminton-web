@@ -3,6 +3,7 @@ import logger from "../config/winston";
 import { DEFINE_STATUS } from "../constants/status";
 import db from "../models";
 import onRemoveParams from "../utils/remove-params";
+import { BaseErrorResponse } from "../config/baseReponse";
 
 const userBookingService = {
   createBooking: (userId, scheduleId, note) => {
@@ -19,7 +20,11 @@ const userBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -91,7 +96,11 @@ const userBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -170,7 +179,11 @@ const userBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -214,7 +227,11 @@ const userBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -237,7 +254,11 @@ const userBookingService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   }

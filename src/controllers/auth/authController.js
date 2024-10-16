@@ -18,7 +18,7 @@ const authController = {
       });
     } catch (error) {
       logger.error(error.message);
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   register: async (req, res) => {
@@ -31,7 +31,7 @@ const authController = {
       res.status(201).json({ message, data });
     } catch (error) {
       logger.error(error.message);
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
 };

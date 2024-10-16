@@ -33,7 +33,11 @@ const authService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -53,7 +57,11 @@ const authService = {
         });
       } catch (error) {
         logger.error(error.parent);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -76,7 +84,11 @@ const authService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },

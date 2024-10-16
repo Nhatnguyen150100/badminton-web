@@ -5,32 +5,45 @@ const { DEFINE_STATUS } = require("../constants/status");
 const badmintonCourtController = {
   getListBadmintonCourt: async (req, res) => {
     try {
-      const { data, message } =
-        await badmintonCourtService.getListBadmintonCourt(req.query);
-      res.status(200).json({ message, data });
+      const rs = await badmintonCourtService.getListBadmintonCourt(req.query);
+      res.status(rs.status).json(rs);
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
+    }
+  },
+  getListBadmintonCourtManager: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const rs = await badmintonCourtService.getListBadmintonCourtManager(
+        id,
+        req.query
+      );
+      res.status(rs.status).json(rs);
+    } catch (error) {
+      res.status(error.status).json(error);
     }
   },
   createBadmintonCourt: async (req, res) => {
     try {
       const { userId, ...resData } = req.body;
-      const { data, message } =
-        await badmintonCourtService.createBadmintonCourt(userId, resData);
-      res.status(200).json({ message, data });
+      const imageCourt = req.imageCourt;
+      const rs = await badmintonCourtService.createBadmintonCourt(
+        userId,
+        resData,
+        imageCourt
+      );
+      res.status(rs.status).json(rs);
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   getBadmintonCourt: async (req, res) => {
     try {
       const { id } = req.params;
-      const { data, message } = await badmintonCourtService.getBadmintonCourt(
-        id
-      );
-      res.status(200).json({ message, data });
+      const rs = await badmintonCourtService.getBadmintonCourt(id);
+      res.status(rs.status).json(rs);
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   updateBadmintonCourt: async (req, res) => {
@@ -42,7 +55,7 @@ const badmintonCourtController = {
       );
       res.status(200).json({ message });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   changeStatusBadmintonCourt: async (req, res) => {
@@ -56,11 +69,13 @@ const badmintonCourtController = {
         });
       }
       const { id } = req.params;
-      const { data, message } =
-        await badmintonCourtService.changeStatusBadmintonCourt(id, status);
-      res.status(200).json({ message, data });
+      const rs = await badmintonCourtService.changeStatusBadmintonCourt(
+        id,
+        status
+      );
+      res.status(rs.status).json(rs);
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   deleteBadmintonCourt: async (req, res) => {
@@ -69,7 +84,7 @@ const badmintonCourtController = {
       const { message } = await badmintonCourtService.deleteBadmintonCourt(id);
       res.status(200).json({ message });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
 };

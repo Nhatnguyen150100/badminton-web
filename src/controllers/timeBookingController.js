@@ -8,7 +8,7 @@ const timeBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   createTimeBooking: async (req, res) => {
@@ -21,7 +21,7 @@ const timeBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   updateTimeBooking: async (req, res) => {
@@ -35,7 +35,7 @@ const timeBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   deleteTimeBooking: async (req, res) => {
@@ -44,7 +44,7 @@ const timeBookingController = {
       const { message } = await timeBookingService.deleteTimeBooking(id);
       res.status(200).json({ message });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
 };

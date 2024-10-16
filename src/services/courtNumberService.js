@@ -1,5 +1,6 @@
 import { Op } from "sequelize";
 import onRemoveParams from "../utils/remove-params";
+import { BaseErrorResponse } from "../config/baseReponse";
 
 const { default: logger } = require("../config/winston");
 const { default: db } = require("../models");
@@ -52,7 +53,11 @@ const courtNumberService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -67,7 +72,11 @@ const courtNumberService = {
         });
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -90,7 +99,11 @@ const courtNumberService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -119,7 +132,11 @@ const courtNumberService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },
@@ -147,7 +164,11 @@ const courtNumberService = {
         }
       } catch (error) {
         logger.error(error.message);
-        reject({status: 400, message: error.message});
+        reject(
+          new BaseErrorResponse({
+            error: error.message,
+          })
+        );
       }
     });
   },

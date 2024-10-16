@@ -3,17 +3,24 @@ import express from "express";
 import tokenMiddleware from "../middleware/tokenMiddleware";
 import badmintonCourtController from "../controllers/badmintonCourtController";
 import badmintonCourtMiddleware from "../middleware/badmintonCourtMiddleware";
+import { uploadImgCourt } from "../config/multer";
 const badmintonCourtRouter = express.Router();
 
 badmintonCourtRouter.post(
   "/",
   tokenMiddleware.verifyToken,
+  uploadImgCourt.single('imageCourt'),
   badmintonCourtController.createBadmintonCourt
 );
 
 badmintonCourtRouter.get(
   "/",
   badmintonCourtController.getListBadmintonCourt
+);
+
+badmintonCourtRouter.get(
+  "/manager/:id",
+  badmintonCourtController.getListBadmintonCourtManager
 );
 
 badmintonCourtRouter.get(

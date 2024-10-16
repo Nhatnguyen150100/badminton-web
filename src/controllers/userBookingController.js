@@ -11,7 +11,7 @@ const userBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   getBookingsByBadmintonCourt: async (req, res) => {
@@ -23,7 +23,7 @@ const userBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   createBooking: async (req, res) => {
@@ -36,7 +36,7 @@ const userBookingController = {
       );
       res.status(200).json({ message, data });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   changeAcceptUserBooking: async (req, res) => {
@@ -47,7 +47,7 @@ const userBookingController = {
       );
       res.status(200).json({ message });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   cancelUserBooking: async (req, res) => {
@@ -58,7 +58,7 @@ const userBookingController = {
       );
       res.status(200).json({ message });
     } catch (error) {
-      res.status(error.status).json({ message: error.message });
+      res.status(error.status).json(error);
     }
   },
   // updateTimeBooking: async (req, res) => {
@@ -72,7 +72,7 @@ const userBookingController = {
   //     );
   //     res.status(200).json({ message, data });
   //   } catch (error) {
-  //     res.status(error.status).json({ message: error.message });
+  //     res.status(error.status).json(error);
   //   }
   // },
   // deleteTimeBooking: async (req, res) => {
@@ -81,7 +81,7 @@ const userBookingController = {
   //     const { message } = await timeBookingService.deleteTimeBooking(id);
   //     res.status(200).json({ message });
   //   } catch (error) {
-  //     res.status(error.status).json({ message: error.message });
+  //     res.status(error.status).json(error);
   //   }
   // },
 };

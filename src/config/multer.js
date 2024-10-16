@@ -22,6 +22,27 @@ const storage = multer.diskStorage({
 
 const uploadAvatar = multer({ storage });
 
+const uploadDirCourt = path.join(__dirname, '..', '..', 'public', 'badminton-court');
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
+
+const storageCourt = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDirCourt);
+  },
+  filename: (req, file, cb) => {
+    const user = req.user;
+    const extension = path.extname(file.originalname);
+    const customName = `${user.id}${extension}`;
+    req.imageCourt = `${process.env.BASE_URL_SERVER}/badminton-court/${customName}`;
+    cb(null, customName);
+  },
+});
+
+const uploadImgCourt = multer({ storage: storageCourt });
+
 export {
-  uploadAvatar
+  uploadAvatar,
+  uploadImgCourt
 }
