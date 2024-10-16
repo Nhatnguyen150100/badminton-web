@@ -1,9 +1,13 @@
-import { where } from "sequelize";
-import { BaseErrorResponse } from "../config/baseReponse";
-
-const { default: logger } = require("../config/winston");
-const { default: db } = require("../models");
-const { default: onRemoveParams } = require("../utils/remove-params");
+import { Op, where } from "sequelize";
+import {
+  BaseErrorResponse,
+  BaseResponseList,
+  BaseSuccessResponse,
+} from "../config/baseReponse";
+import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
+import db from "../models";
+import onRemoveParams from "../utils/remove-params";
+import logger from "../config/winston";
 
 const timeBookingService = {
   getListTimeBookings: (badmintonCourtId, data) => {
@@ -35,22 +39,16 @@ const timeBookingService = {
           [0]
         );
         const result = await db.TimeBooking.findAndCountAll(option);
-        if (!result) {
-          reject({
-            data: null,
-            message: "No court numbers found",
-          });
-          return;
-        }
         const timeBookings = result.rows;
         const totalCount = result.count;
-        resolve({
-          data: {
-            content: timeBookings,
+        return resolve(
+          new BaseResponseList({
+            list: timeBookings,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
             totalCount,
-          },
-          message: "List of time bookings retrieved successfully",
-        });
+            message: "List of time bookings retrieved successfully",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -66,10 +64,12 @@ const timeBookingService = {
       try {
         const timeBookingData = { badmintonCourtId, startTime, endTime };
         const timeBooking = await db.TimeBooking.create(timeBookingData);
-        resolve({
-          data: timeBooking,
-          message: "Time booking created successfully",
-        });
+        return resolve(
+          new BaseSuccessResponse({
+            data: timeBooking,
+            message: "Thêm thời gian mới thành công",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -88,9 +88,11 @@ const timeBookingService = {
           raw: true,
         });
         if (!timeBooking) {
-          reject({
-            message: "Time booking not found",
-          });
+          reject(
+            new BaseErrorResponse({
+              message: "Time booking not found",
+            })
+          );
         }
         const updated = await db.TimeBooking.update(data, {
           where: {
@@ -98,14 +100,17 @@ const timeBookingService = {
           },
         });
         if (updated) {
-          resolve({
-            message: "Time booking updated successfully",
-          });
-          return;
+          return resolve(
+            new BaseSuccessResponse({
+              message: "Cập nhật thời gian thành công",
+            })
+          );
         }
-        reject({
-          message: "Failed to update time booking",
-        });
+        return reject(
+          new BaseErrorResponse({
+            message: "Cập nhật thời gian thất bại",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -121,18 +126,22 @@ const timeBookingService = {
       try {
         const timeBooking = await db.TimeBooking.findByPk(timeBookingId);
         if (!timeBooking) {
-          reject({
-            message: "Time booking not found",
-          });
+          return resolve(
+            new BaseErrorResponse({
+              message: "Không tìm thấy thời gian phù hợp",
+            })
+          );
         }
         await db.TimeBooking.destroy({
           where: {
             id: timeBookingId,
           },
         });
-        resolve({
-          message: "Time booking deleted successfully",
-        });
+        return resolve(
+          new BaseSuccessResponse({
+            message: "Xóa thời gian thành công",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(

@@ -5,7 +5,7 @@ import timeBookingController from "../controllers/timeBookingController";
 const timeBookingRouter = express.Router();
 
 timeBookingRouter.get(
-  "/",
+  "/:id",
   tokenMiddleware.verifyToken,
   timeBookingController.getListTimeBookings
 );

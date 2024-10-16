@@ -86,10 +86,11 @@ const courtNumberService = {
       try {
         const { data } = await courtNumberService.getCourtNumber(courtNumberId);
         if (!data) {
-          reject({
-            message: "Court number not found",
-          });
-          return;
+          reject(
+            new BaseErrorResponse({
+              message: "Court number not found",
+            })
+          );
         }
         const updatedCourtNumber = await db.CourtNumber.update(
           { name },

@@ -3,10 +3,9 @@ import timeBookingService from "../services/timeBookingService";
 const timeBookingController = {
   getListTimeBookings: async (req, res) => {
     try {
-      const { data, message } = await timeBookingService.getListTimeBookings(
-        req.query
-      );
-      res.status(200).json({ message, data });
+      const { id } = req.params;
+      const rs = await timeBookingService.getListTimeBookings(id, req.query);
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -14,12 +13,12 @@ const timeBookingController = {
   createTimeBooking: async (req, res) => {
     try {
       const { badmintonCourtId, startTime, endTime } = req.body;
-      const { data, message } = await timeBookingService.createTimeBooking(
+      const rs = await timeBookingService.createTimeBooking(
         badmintonCourtId,
         startTime,
         endTime
       );
-      res.status(200).json({ message, data });
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -28,12 +27,12 @@ const timeBookingController = {
     try {
       const { id } = req.params;
       const { startTime, endTime } = req.body;
-      const { data, message } = await timeBookingService.updateTimeBooking(
+      const rs = await timeBookingService.updateTimeBooking(
         id,
         startTime,
         endTime
       );
-      res.status(200).json({ message, data });
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
