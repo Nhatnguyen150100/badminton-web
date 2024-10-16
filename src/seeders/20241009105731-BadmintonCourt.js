@@ -24,7 +24,8 @@ module.exports = {
           address: "123 Đường XYZ, Quận 1, TP.HCM",
           lang: 10.762622,
           lat: 10.762622,
-          imageCourt: "123e4567-e89b-12d3-a456-426614174001",
+          imageCourt:
+            "http://localhost:8080/badminton-court/d511aeab-f46d-408c-a29d-55ad1855651a.jpg",
           description: "Sân cầu lông rộng rãi, đầy đủ tiện nghi và ánh sáng.",
           status: "PENDING_APPROVAL",
           createdAt: new Date(),

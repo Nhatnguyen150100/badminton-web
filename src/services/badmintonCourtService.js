@@ -19,7 +19,7 @@ const badmintonCourtService = {
         const { page, limit, nameLike, district, ward } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
-          status: DEFINE_STATUS.ACCEPTED
+          status: DEFINE_STATUS.ACCEPTED,
         };
         if (nameLike) {
           query = {
@@ -45,7 +45,7 @@ const badmintonCourtService = {
             where: query,
             limit: Number(limit),
             offset,
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
             distinct: true,
@@ -55,7 +55,7 @@ const badmintonCourtService = {
         const result = await db.BadmintonCourt.findAndCountAll(option);
         const court = result.rows;
         const totalCount = result.count;
-        resolve(
+        return resolve(
           new BaseResponseList({
             list: court,
             status: DEFINE_STATUS_RESPONSE.SUCCESS,
@@ -106,7 +106,7 @@ const badmintonCourtService = {
             where: query,
             limit: Number(limit),
             offset,
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
             distinct: true,
@@ -139,16 +139,18 @@ const badmintonCourtService = {
       try {
         const court = await db.BadmintonCourt.findByPk(courtId, { raw: true });
         if (court) {
-          resolve({
-            data: court,
-            message: "Badminton court found successfully",
-          });
-          return;
+          return resolve(
+            new BaseSuccessResponse({
+              data: court,
+              message: "Badminton court found successfully",
+            })
+          );
         }
-        reject({
-          data: null,
-          message: "Badminton court not found",
-        });
+        return reject(
+          new BaseErrorResponse({
+            message: "Badminton court not found",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -187,13 +189,13 @@ const badmintonCourtService = {
           return resolve(
             new BaseSuccessResponse({
               data: newCourt,
-              message: "Badminton court created successfully",
+              message: "Tạo thông tin sân cầu mới thành công",
             })
           );
         }
         return reject(
           new BaseErrorResponse({
-            message: "Badminton court created failed",
+            message: "Tạo thông tin sân cầu mới thất bại",
           })
         );
       } catch (error) {
@@ -217,13 +219,13 @@ const badmintonCourtService = {
         if (updatedCourt) {
           return resolve(
             new BaseSuccessResponse({
-              message: "Badminton court updated successfully",
+              message: "Cập nhật thông tin sân cầu thành công",
             })
           );
         }
         return reject(
           new BaseErrorResponse({
-            message: "Failed to update badminton court",
+            message: "Cập nhật thông tin sân cầu thất bại",
           })
         );
       } catch (error) {
@@ -244,9 +246,11 @@ const badmintonCourtService = {
           { where: { id: courtId } }
         );
         if (updatedStatus) {
-          return resolve(new BaseSuccessResponse({
-            message: "Changed status of badminton courts successfully",
-          }));
+          return resolve(
+            new BaseSuccessResponse({
+              message: "Changed status of badminton courts successfully",
+            })
+          );
         }
         return reject(
           new BaseErrorResponse({
@@ -270,10 +274,12 @@ const badmintonCourtService = {
           where: { id: courtId },
         });
         if (deletedCourt) {
-          return resolve(new BaseSuccessResponse({
-            data: deletedCourt,
-            message: "Badminton court deleted successfully",
-          }));
+          return resolve(
+            new BaseSuccessResponse({
+              data: deletedCourt,
+              message: "Badminton court deleted successfully",
+            })
+          );
         }
         return reject(
           new BaseErrorResponse({

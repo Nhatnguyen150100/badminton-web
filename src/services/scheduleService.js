@@ -2,7 +2,7 @@ import { Op } from "sequelize";
 import logger from "../config/winston";
 import db from "../models";
 import dayjs from "dayjs";
-import customParseFormat from 'dayjs/plugin/customParseFormat';
+import customParseFormat from "dayjs/plugin/customParseFormat";
 import onRemoveParams from "../utils/remove-params";
 import { BaseErrorResponse } from "../config/baseReponse";
 dayjs.extend(customParseFormat);
@@ -160,7 +160,7 @@ const scheduleService = {
         const { page, limit, nameLike } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
-          badmintonCourtId
+          badmintonCourtId,
         };
         if (nameLike) {
           query = {
@@ -175,7 +175,7 @@ const scheduleService = {
             where: query,
             limit: Number(limit),
             offset,
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
             distinct: true,

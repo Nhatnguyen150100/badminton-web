@@ -27,14 +27,12 @@ const badmintonCourtController = {
     try {
       const { userId, ...resData } = req.body;
       const imageCourt = req.imageCourt;
-      const rs = await badmintonCourtService.createBadmintonCourt(
-        userId,
-        resData,
-        imageCourt
-      );
+      const rs = await badmintonCourtService.createBadmintonCourt(userId, {
+        ...resData,
+        imageCourt,
+      });
       res.status(rs.status).json(rs);
     } catch (error) {
-      console.log("🚀 ~ createBadmintonCourt: ~ error:", error)
       res.status(error.status).json(error);
     }
   },

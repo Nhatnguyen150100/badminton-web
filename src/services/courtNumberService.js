@@ -1,6 +1,11 @@
 import { Op } from "sequelize";
 import onRemoveParams from "../utils/remove-params";
-import { BaseErrorResponse } from "../config/baseReponse";
+import {
+  BaseErrorResponse,
+  BaseResponseList,
+  BaseSuccessResponse,
+} from "../config/baseReponse";
+import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 
 const { default: logger } = require("../config/winston");
 const { default: db } = require("../models");
@@ -12,7 +17,7 @@ const courtNumberService = {
         const { page, limit, nameLike } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
-          badmintonCourtId
+          badmintonCourtId,
         };
         if (nameLike) {
           query = {
@@ -27,7 +32,7 @@ const courtNumberService = {
             where: query,
             limit: Number(limit),
             offset,
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
             distinct: true,
@@ -35,22 +40,16 @@ const courtNumberService = {
           [0]
         );
         const result = await db.CourtNumber.findAndCountAll(option);
-        if (!result) {
-          reject({
-            data: null,
-            message: "No court numbers found",
-          });
-          return;
-        }
         const courtNumbers = result.rows;
         const totalCount = result.count;
-        resolve({
-          data: {
-            content: courtNumbers,
+        return resolve(
+          new BaseResponseList({
+            list: courtNumbers,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
             totalCount,
-          },
-          message: "List of court numbers retrieved successfully",
-        });
+            message: "List of courts retrieved successfully",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -66,10 +65,49 @@ const courtNumberService = {
       try {
         const courtNumberData = { badmintonCourtId, name };
         const newCourtNumber = await db.CourtNumber.create(courtNumberData);
-        resolve({
-          data: newCourtNumber,
-          message: "Court number created successfully",
-        });
+        return resolve(
+          new BaseSuccessResponse({
+            data: newCourtNumber,
+            message: "Thêm sân cầu mới thành công",
+          })
+        );
+      } catch (error) {
+        logger.error(error.message);
+        reject(
+          new BaseErrorResponse({
+            message: error.message,
+          })
+        );
+      }
+    });
+  },
+  updateCourtNumber: (courtNumberId, name) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { data } = await courtNumberService.getCourtNumber(courtNumberId);
+        if (!data) {
+          reject({
+            message: "Court number not found",
+          });
+          return;
+        }
+        const updatedCourtNumber = await db.CourtNumber.update(
+          { name },
+          { where: { id: courtNumberId } }
+        );
+        if (updatedCourtNumber) {
+          return resolve(
+            new BaseSuccessResponse({
+              message: "Cập nhật sân cầu thành công",
+            })
+          );
+        } else {
+          reject(
+            new BaseErrorResponse({
+              message: "Cập nhật sân cầu thất bại",
+            })
+          );
+        }
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -107,60 +145,32 @@ const courtNumberService = {
       }
     });
   },
-  updateCourtNumber: (courtNumberId, name) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const { data } = await courtNumberService.getCourtNumber(courtNumberId);
-        if (!data) {
-          reject({
-            message: "Court number not found",
-          });
-          return;
-        }
-        const updatedCourtNumber = await db.CourtNumber.update(
-          { name },
-          { where: { id: courtNumberId } }
-        );
-        if (updatedCourtNumber) {
-          resolve({
-            message: "Court number updated successfully",
-          });
-        } else {
-          reject({
-            message: "Failed to update court number",
-          });
-        }
-      } catch (error) {
-        logger.error(error.message);
-        reject(
-          new BaseErrorResponse({
-            message: error.message,
-          })
-        );
-      }
-    });
-  },
   deleteCourtNumber: (courtNumberId) => {
     return new Promise(async (resolve, reject) => {
       try {
         const { data } = await courtNumberService.getCourtNumber(courtNumberId);
         if (!data) {
-          reject({
-            message: "Court number not found",
-          });
-          return;
+          return resolve(
+            new BaseErrorResponse({
+              message: "Không tìm thấy sân cầu",
+            })
+          );
         }
         const deletedCourtNumber = await db.CourtNumber.destroy({
           where: { id: courtNumberId },
         });
         if (deletedCourtNumber) {
-          resolve({
-            message: "Court number deleted successfully",
-          });
+          return resolve(
+            new BaseSuccessResponse({
+              message: "Xóa sân cầu thành công",
+            })
+          );
         } else {
-          reject({
-            message: "Failed to delete court number",
-          });
+          return resolve(
+            new BaseErrorResponse({
+              message: "Xóa sân cầu thất bại",
+            })
+          );
         }
       } catch (error) {
         logger.error(error.message);

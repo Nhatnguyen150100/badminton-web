@@ -12,7 +12,7 @@ const timeBookingService = {
         const { page, limit, nameLike } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
-          badmintonCourtId
+          badmintonCourtId,
         };
         if (nameLike) {
           query = {
@@ -27,7 +27,7 @@ const timeBookingService = {
             where: query,
             limit: Number(limit),
             offset,
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
             distinct: true,
@@ -97,7 +97,7 @@ const timeBookingService = {
             id: timeBookingId,
           },
         });
-        if(updated) {
+        if (updated) {
           resolve({
             message: "Time booking updated successfully",
           });
@@ -105,7 +105,7 @@ const timeBookingService = {
         }
         reject({
           message: "Failed to update time booking",
-        })
+        });
       } catch (error) {
         logger.error(error.message);
         reject(

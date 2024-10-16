@@ -3,10 +3,9 @@ import courtNumberService from "../services/courtNumberService";
 const courtNumberController = {
   getListCourtNumbers: async (req, res) => {
     try {
-      const { data, message } = await courtNumberService.getListCourtNumber(
-        req.query
-      );
-      res.status(200).json({ message, data });
+      const { id } = req.params;
+      const rs = await courtNumberService.getListCourtNumber(id, req.query);
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -14,20 +13,11 @@ const courtNumberController = {
   createCourtNumber: async (req, res) => {
     try {
       const { badmintonCourtId, name } = req.body;
-      const { data, message } = await courtNumberService.createCourtNumber(
+      const rs = await courtNumberService.createCourtNumber(
         badmintonCourtId,
         name
       );
-      res.status(200).json({ message, data });
-    } catch (error) {
-      res.status(error.status).json(error);
-    }
-  },
-  getCourtNumber: async (req, res) => {
-    try {
-      const { id } = req.params;
-      const { data, message } = await courtNumberService.getCourtNumber(id);
-      res.status(200).json({ message, data });
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -36,11 +26,8 @@ const courtNumberController = {
     try {
       const { id } = req.params;
       const { name } = req.body;
-      const { data, message } = await courtNumberService.updateCourtNumber(
-        id,
-        name
-      );
-      res.status(200).json({ message, data });
+      const rs = await courtNumberService.updateCourtNumber(id, name);
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -48,8 +35,8 @@ const courtNumberController = {
   deleteCourtNumber: async (req, res) => {
     try {
       const { id } = req.params;
-      const { data, message } = await courtNumberService.deleteCourtNumber(id);
-      res.status(200).json({ message, data });
+      const rs = await courtNumberService.deleteCourtNumber(id);
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }

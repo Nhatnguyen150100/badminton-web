@@ -9,14 +9,11 @@ const badmintonCourtRouter = express.Router();
 badmintonCourtRouter.post(
   "/",
   tokenMiddleware.verifyToken,
-  uploadImgCourt.single('imageCourt'),
+  uploadImgCourt.single("imageCourt"),
   badmintonCourtController.createBadmintonCourt
 );
 
-badmintonCourtRouter.get(
-  "/",
-  badmintonCourtController.getListBadmintonCourt
-);
+badmintonCourtRouter.get("/", badmintonCourtController.getListBadmintonCourt);
 
 badmintonCourtRouter.get(
   "/manager/:id",
@@ -25,6 +22,7 @@ badmintonCourtRouter.get(
 
 badmintonCourtRouter.get(
   "/:id",
+  tokenMiddleware.verifyToken,
   badmintonCourtController.getBadmintonCourt
 );
 
@@ -32,6 +30,7 @@ badmintonCourtRouter.put(
   "/:id",
   tokenMiddleware.verifyToken,
   badmintonCourtMiddleware.checkCourtOwner,
+  uploadImgCourt.single("imageCourt"),
   badmintonCourtController.updateBadmintonCourt
 );
 

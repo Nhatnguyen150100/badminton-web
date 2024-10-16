@@ -5,15 +5,9 @@ import courtNumberController from "../controllers/courtNumberController";
 const courtNumberRouter = express.Router();
 
 courtNumberRouter.get(
-  "/",
-  tokenMiddleware.verifyToken,
-  courtNumberController.getListCourtNumbers
-);
-
-courtNumberRouter.get(
   "/:id",
   tokenMiddleware.verifyToken,
-  courtNumberController.getCourtNumber
+  courtNumberController.getListCourtNumbers
 );
 
 courtNumberRouter.post(

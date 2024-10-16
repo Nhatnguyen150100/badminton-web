@@ -2,7 +2,7 @@ import path, { join } from "path";
 import fs from "fs";
 import multer from "multer";
 
-const uploadDir = path.join(__dirname, '..', '..', 'public', 'avatars');
+const uploadDir = path.join(__dirname, "..", "..", "public", "avatars");
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
@@ -22,9 +22,15 @@ const storage = multer.diskStorage({
 
 const uploadAvatar = multer({ storage });
 
-const uploadDirCourt = path.join(__dirname, '..', '..', 'public', 'badminton-court');
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir);
+const uploadDirCourt = path.join(
+  __dirname,
+  "..",
+  "..",
+  "public",
+  "badminton-court"
+);
+if (!fs.existsSync(uploadDirCourt)) {
+  fs.mkdirSync(uploadDirCourt);
 }
 
 const storageCourt = multer.diskStorage({
@@ -42,7 +48,4 @@ const storageCourt = multer.diskStorage({
 
 const uploadImgCourt = multer({ storage: storageCourt });
 
-export {
-  uploadAvatar,
-  uploadImgCourt
-}
+export { uploadAvatar, uploadImgCourt };

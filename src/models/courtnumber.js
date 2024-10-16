@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class CourtNumber extends Model {
     /**
@@ -20,22 +18,28 @@ module.exports = (sequelize, DataTypes) => {
         as: "schedules",
         sourceKey: "id",
         onDelete: "CASCADE",
-        hooks: true
+        hooks: true,
       });
     }
   }
-  CourtNumber.init({
-    id: {
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      type: DataTypes.UUID,
+  CourtNumber.init(
+    {
+      id: {
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        type: DataTypes.UUID,
+      },
+      name: DataTypes.STRING,
+      badmintonCourtId: {
+        allowNull: false,
+        type: DataTypes.UUID,
+      },
     },
-    name: DataTypes.STRING,
-    badmintonCourtId: DataTypes.UUID
-  }, {
-    sequelize,
-    modelName: 'CourtNumber',
-  });
+    {
+      sequelize,
+      modelName: "CourtNumber",
+    }
+  );
   return CourtNumber;
 };

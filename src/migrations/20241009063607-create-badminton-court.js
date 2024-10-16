@@ -23,10 +23,10 @@ module.exports = {
         type: Sequelize.STRING,
       },
       lang: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(9, 6),
       },
       lat: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(9, 6),
       },
       userId: {
         type: Sequelize.UUID,

@@ -42,7 +42,7 @@ const userBookingService = {
             attributes: ["status"],
             limit: Number(limit),
             offset,
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
             distinct: true,
@@ -117,7 +117,7 @@ const userBookingService = {
             limit: Number(limit),
             offset,
             attributes: ["status"],
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
             distinct: true,
@@ -194,11 +194,11 @@ const userBookingService = {
           where: { id: userBookingId },
           raw: true,
         });
-        if(currentStatus.status === DEFINE_STATUS.CANCELED) {
+        if (currentStatus.status === DEFINE_STATUS.CANCELED) {
           return reject({
             status: 400,
             message: "User booking has been canceled",
-          })
+          });
         }
         const status = DEFINE_STATUS.ACCEPTED;
         const otherStatus = DEFINE_STATUS.DENIED;
@@ -261,7 +261,7 @@ const userBookingService = {
         );
       }
     });
-  }
+  },
 };
 
 export default userBookingService;

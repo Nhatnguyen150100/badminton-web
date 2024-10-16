@@ -28,7 +28,7 @@ const authService = {
           delete user.password;
           resolve({
             data: user,
-            message: "Login successfully",
+            message: "Đăng nhập thành công",
           });
         }
       } catch (error) {
