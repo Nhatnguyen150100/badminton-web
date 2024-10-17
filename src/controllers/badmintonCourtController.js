@@ -11,6 +11,14 @@ const badmintonCourtController = {
       res.status(error.status).json(error);
     }
   },
+  getListBadmintonCourtAdmin: async (req, res) => {
+    try {
+      const rs = await badmintonCourtService.getListBadmintonCourtAdmin(req.query);
+      res.status(rs.status).json(rs);
+    } catch (error) {
+      res.status(error.status).json(error);
+    }
+  },
   getListBadmintonCourtManager: async (req, res) => {
     try {
       const { id } = req.params;

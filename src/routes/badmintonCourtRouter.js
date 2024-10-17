@@ -20,6 +20,7 @@ badmintonCourtRouter.get(
   badmintonCourtController.getListBadmintonCourtManager
 );
 
+
 badmintonCourtRouter.get(
   "/:id",
   tokenMiddleware.verifyToken,
@@ -32,6 +33,12 @@ badmintonCourtRouter.put(
   badmintonCourtMiddleware.checkCourtOwner,
   uploadImgCourt.single("imageCourt"),
   badmintonCourtController.updateBadmintonCourt
+);
+
+badmintonCourtRouter.get(
+  "/admin/list-court",
+  tokenMiddleware.verifyTokenAdmin,
+  badmintonCourtController.getListBadmintonCourtAdmin
 );
 
 badmintonCourtRouter.put(

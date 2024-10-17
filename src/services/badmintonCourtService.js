@@ -73,6 +73,63 @@ const badmintonCourtService = {
       }
     });
   },
+  getListBadmintonCourtAdmin: (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { page, limit, nameLike, status } = data;
+        if(status && !Object.values(DEFINE_STATUS).includes(status)) {
+          return reject(new BaseErrorResponse({
+            message: "Invalid status. Please choose from accepted, pending, or rejected."
+          }));
+        } 
+        let offset = page && limit ? (page - 1) * limit : undefined;
+        let query = {};
+        if(status) {
+          query = {
+            status
+          };
+        }
+        if (nameLike) {
+          query = {
+            ...query,
+            name: {
+              [Op.like]: `%${nameLike}%`,
+            },
+          };
+        }
+        const option = onRemoveParams(
+          {
+            where: query,
+            limit: Number(limit),
+            offset,
+            order: [["createdAt", "DESC"]],
+            raw: true,
+            nest: true,
+            distinct: true,
+          },
+          [0]
+        );
+        const result = await db.BadmintonCourt.findAndCountAll(option);
+        const court = result.rows;
+        const totalCount = result.count;
+        return resolve(
+          new BaseResponseList({
+            list: court,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
+            totalCount,
+            message: "List of courts retrieved successfully",
+          })
+        );
+      } catch (error) {
+        logger.error(error.message);
+        reject(
+          new BaseErrorResponse({
+            message: error.message,
+          })
+        );
+      }
+    });
+  },
   getListBadmintonCourtManager: (userId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -248,7 +305,7 @@ const badmintonCourtService = {
         if (updatedStatus) {
           return resolve(
             new BaseSuccessResponse({
-              message: "Changed status of badminton courts successfully",
+              message: "Thay đổi trạng thái thông tin sân thành công",
             })
           );
         }
