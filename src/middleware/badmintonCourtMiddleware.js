@@ -9,6 +9,7 @@ const badmintonCourtMiddleware = {
       const { id: userId } = req.user;
       const { id } = req.params;
       const { data } = await badmintonCourtService.getBadmintonCourt(id);
+      req.imageCourt = data.imageCourt;
       if (data.userId === userId) next();
       else {
         return res

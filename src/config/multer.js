@@ -1,6 +1,7 @@
 import path, { join } from "path";
 import fs from "fs";
 import multer from "multer";
+const { v4: uuidv4 } = require("uuid");
 
 const uploadDir = path.join(__dirname, "..", "..", "public", "avatars");
 if (!fs.existsSync(uploadDir)) {
@@ -38,9 +39,12 @@ const storageCourt = multer.diskStorage({
     cb(null, uploadDirCourt);
   },
   filename: (req, file, cb) => {
-    const user = req.user;
+    const uuidRandom = uuidv4();
+    const { id } = req.params;
+    const createPath = id ?? uuidRandom;
+    const existPath = req?.imageCourt.split("/").pop().split(".")[0];
     const extension = path.extname(file.originalname);
-    const customName = `${user.id}${extension}`;
+    const customName = `${existPath ?? createPath}${extension}`;
     req.imageCourt = `${process.env.BASE_URL_SERVER}/badminton-court/${customName}`;
     cb(null, customName);
   },
