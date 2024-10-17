@@ -18,10 +18,12 @@ module.exports = (sequelize, DataTypes) => {
       });
       Schedule.belongsTo(models.TimeBooking, {
         foreignKey: { name: "timeBookingId", allowNull: false },
+        as: 'timeBooking',
         targetKey: "id",
       });
       Schedule.belongsTo(models.CourtNumber, {
         foreignKey: { name: "courtNumberId", allowNull: false },
+        as: 'courtNumber',
         targetKey: "id",
       });
       Schedule.hasMany(models.UserBooking, {

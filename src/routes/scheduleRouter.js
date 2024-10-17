@@ -5,7 +5,7 @@ import scheduleController from "../controllers/scheduleController";
 const scheduleRouter = express.Router();
 
 scheduleRouter.get(
-  "/",
+  "/:id",
   tokenMiddleware.verifyToken,
   scheduleController.getListSchedule
 );

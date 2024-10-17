@@ -3,10 +3,9 @@ import scheduleService from "../services/scheduleService";
 const scheduleController = {
   getListSchedule: async (req, res) => {
     try {
-      const { data, message } = await scheduleService.getListSchedule(
-        req.query
-      );
-      res.status(200).json({ message, data });
+      const { id } = req.params;
+      const rs = await scheduleService.getListSchedule(id, req.query);
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -20,29 +19,31 @@ const scheduleController = {
         appointmentDate,
         constBooking,
       } = req.body;
-      if(!badmintonCourtId) {
-        return res.status(400).json({ message: "badminton courtId is required" });
+      if (!badmintonCourtId) {
+        return res
+          .status(400)
+          .json({ message: "badminton courtId is required" });
       }
-      if(!courtNumberId) {
+      if (!courtNumberId) {
         return res.status(400).json({ message: "courtNumberId is required" });
       }
-      if(!timeBookingId) {
+      if (!timeBookingId) {
         return res.status(400).json({ message: "timeBookingId is required" });
       }
-      if(!appointmentDate) {
+      if (!appointmentDate) {
         return res.status(400).json({ message: "appointmentDate is required" });
       }
-      if(!constBooking) {
+      if (!constBooking) {
         return res.status(400).json({ message: "constBooking is required" });
       }
-      const { data, message } = await scheduleService.createSchedule(
+      const rs = await scheduleService.createSchedule(
         badmintonCourtId,
         courtNumberId,
         timeBookingId,
         appointmentDate,
         constBooking
       );
-      res.status(200).json({ message, data });
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -52,14 +53,14 @@ const scheduleController = {
       const { id } = req.params;
       const { courtNumberId, timeBookingId, appointmentDate, constBooking } =
         req.body;
-      const { data, message } = await scheduleService.updatedSchedule(
+      const rs = await scheduleService.updatedSchedule(
         id,
         courtNumberId,
         timeBookingId,
         appointmentDate,
         constBooking
       );
-      res.status(200).json({ message, data });
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error?.status ?? 500).json({ message: error.message });
     }
@@ -67,8 +68,8 @@ const scheduleController = {
   deleteSchedule: async (req, res) => {
     try {
       const { id } = req.params;
-      const { message } = await scheduleService.deleteSchedule(id);
-      res.status(200).json({ message });
+      const rs = await scheduleService.deleteSchedule(id);
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }

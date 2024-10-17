@@ -13,19 +13,11 @@ const timeBookingService = {
   getListTimeBookings: (badmintonCourtId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { page, limit, nameLike } = data;
+        const { page, limit } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
           badmintonCourtId,
         };
-        if (nameLike) {
-          query = {
-            ...query,
-            name: {
-              [Op.like]: `%${nameLike}%`,
-            },
-          };
-        }
         const option = onRemoveParams(
           {
             where: query,

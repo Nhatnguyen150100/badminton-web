@@ -4,7 +4,8 @@ import db from "../models";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import onRemoveParams from "../utils/remove-params";
-import { BaseErrorResponse } from "../config/baseReponse";
+import { BaseErrorResponse, BaseResponseList, BaseSuccessResponse } from "../config/baseReponse";
+import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 dayjs.extend(customParseFormat);
 
 const scheduleService = {
@@ -46,11 +47,11 @@ const scheduleService = {
           timeBookingId
         );
         if (isExist) {
-          reject({
-            status: 400,
-            message: "This court already has an appointment at this time",
-          });
-          return;
+          return reject(
+            new BaseErrorResponse({
+              message: "Sân cầu này đã được tạo trước đó tại cùng 1 thời gian",
+            })
+          );
         }
         const data = {
           badmintonCourtId,
@@ -61,15 +62,18 @@ const scheduleService = {
         };
         const createdSchedule = await db.Schedule.create(data);
         if (createdSchedule) {
-          resolve({
-            data: createdSchedule,
-            message: "Schedule created successfully",
-          });
-          return;
+          return resolve(
+            new BaseSuccessResponse({
+              data: createdSchedule,
+              message: "Tạo lịch thành công",
+            })
+          );
         }
-        reject({
-          message: "Failed to create schedule",
-        });
+        return reject(
+          new BaseErrorResponse({
+            message: "Tạo lịch thất bại",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -94,10 +98,11 @@ const scheduleService = {
           timeBookingId
         );
         if (!isExist) {
-          reject({
-            message: "This court doesn't have an appointment at this time",
-          });
-          return;
+          return reject(
+            new BaseErrorResponse({
+              message: "Sân cầu này đã được tạo trước đó tại cùng 1 thời gian",
+            })
+          );
         }
         const updatedSchedule = await db.Schedule.update(
           {
@@ -111,14 +116,17 @@ const scheduleService = {
           }
         );
         if (updatedSchedule[0]) {
-          resolve({
-            message: "Schedule updated successfully",
-          });
-          return;
+          return resolve(
+            new BaseSuccessResponse({
+              message: "Cập nhật lịch thành công",
+            })
+          );
         }
-        reject({
-          message: "Failed to update schedule",
-        });
+        return reject(
+          new BaseErrorResponse({
+            message: "Cập nhật lịch thất bại",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -136,14 +144,18 @@ const scheduleService = {
           where: { id: scheduleId },
         });
         if (deletedSchedule) {
-          resolve({
-            message: "Schedule deleted successfully",
-          });
-          return;
+          return resolve(
+            new BaseSuccessResponse({
+              data: deletedSchedule,
+              message: "Xóa lịch thành công",
+            })
+          );
         }
-        reject({
-          message: "Failed to delete schedule",
-        });
+        return reject(
+          new BaseErrorResponse({
+            message: "Xóa lịch thất bại",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -162,9 +174,9 @@ const scheduleService = {
         let query = {
           badmintonCourtId,
         };
+        let queryCourtNumber;
         if (nameLike) {
-          query = {
-            ...query,
+          queryCourtNumber = {
             name: {
               [Op.like]: `%${nameLike}%`,
             },
@@ -172,6 +184,19 @@ const scheduleService = {
         }
         const option = onRemoveParams(
           {
+            include: [
+              {
+                model: db.CourtNumber,
+                as: 'courtNumber',
+                attributes: ["name"],
+                where: queryCourtNumber
+              },
+              {
+                model: db.TimeBooking,
+                as: 'timeBooking',
+                attributes: ["startTime", "endTime"],
+              }
+            ],
             where: query,
             limit: Number(limit),
             offset,
@@ -183,22 +208,16 @@ const scheduleService = {
           [0]
         );
         const result = await db.Schedule.findAndCountAll(option);
-        if (!result) {
-          reject({
-            data: null,
-            message: "No schedule numbers found",
-          });
-          return;
-        }
         const schedules = result.rows;
         const totalCount = result.count;
-        resolve({
-          data: {
-            content: schedules,
+        return resolve(
+          new BaseResponseList({
+            list: schedules,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
             totalCount,
-          },
-          message: "List of schedule retrieved successfully",
-        });
+            message: "List of schedule retrieved successfully",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
