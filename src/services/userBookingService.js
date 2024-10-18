@@ -1,6 +1,6 @@
 import { Op } from "sequelize";
 import logger from "../config/winston";
-import { DEFINE_STATUS } from "../constants/status";
+import { DEFINE_SCHEDULE_STATUS, DEFINE_STATUS } from "../constants/status";
 import db from "../models";
 import onRemoveParams from "../utils/remove-params";
 import { BaseErrorResponse } from "../config/baseReponse";
@@ -214,6 +214,16 @@ const userBookingService = {
               status: {
                 [Op.ne]: status,
               },
+            },
+          }
+        );
+        await db.Schedule.update(
+          {
+            status: DEFINE_SCHEDULE_STATUS.NOT_AVAILABLE,
+          },
+          {
+            where: {
+              id: currentStatus.scheduleId,
             },
           }
         );
