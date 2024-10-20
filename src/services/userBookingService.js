@@ -134,7 +134,7 @@ const userBookingService = {
               model: db.User,
               as: "user",
               required: true,
-              attributes: ["fullName", "email"],
+              attributes: ["fullName", "email", "phoneNumber"],
             },
             {
               model: db.Schedule,
