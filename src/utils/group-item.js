@@ -9,7 +9,7 @@ function groupAndMerge(results, groupField, mergeField) {
     } else {
       acc.push({
         ...current,
-        [mergeField]: (current[(mergeField)]).id ? [current[(mergeField)]] : [],
+        [mergeField]: current[mergeField].id ? [current[mergeField]] : [],
       });
     }
 

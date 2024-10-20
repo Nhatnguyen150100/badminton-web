@@ -11,13 +11,13 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       UserBooking.belongsTo(models.Schedule, {
         foreignKey: { name: "scheduleId", allowNull: false },
-        as: 'schedule',
+        as: "schedule",
         targetKey: "id",
         through: { UserBooking },
       });
       UserBooking.belongsTo(models.User, {
         foreignKey: { name: "userId", allowNull: false },
-        as: 'user',
+        as: "user",
         targetKey: "id",
         through: { UserBooking },
       });
@@ -31,8 +31,14 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         type: DataTypes.UUID,
       },
-      scheduleId: DataTypes.UUID,
-      userId: DataTypes.UUID,
+      scheduleId: {
+        allowNull: false,
+        type: DataTypes.UUID,
+      },
+      userId: {
+        allowNull: false,
+        type: DataTypes.UUID,
+      },
       note: DataTypes.TEXT,
       status: DataTypes.STRING,
     },

@@ -3,7 +3,12 @@ import logger from "../config/winston";
 import { DEFINE_SCHEDULE_STATUS, DEFINE_STATUS } from "../constants/status";
 import db from "../models";
 import onRemoveParams from "../utils/remove-params";
-import { BaseErrorResponse } from "../config/baseReponse";
+import {
+  BaseErrorResponse,
+  BaseResponseList,
+  BaseSuccessResponse,
+} from "../config/baseReponse";
+import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 
 const userBookingService = {
   createBooking: (userId, scheduleId, note) => {
@@ -13,11 +18,14 @@ const userBookingService = {
           userId,
           scheduleId,
           note,
+          status: DEFINE_STATUS.PENDING_APPROVAL,
         });
-        resolve({
-          data: newBooking,
-          message: "Booking created successfully",
-        });
+        return resolve(
+          new BaseSuccessResponse({
+            data: newBooking,
+            message: "Đặt lịch thành công",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -59,41 +67,33 @@ const userBookingService = {
                 {
                   model: db.BadmintonCourt,
                   as: "badmintonCourt",
-                  include: [
-                    {
-                      model: db.CourtNumber,
-                      as: "courtNumbers",
-                      attributes: ["name"],
-                    },
-                    {
-                      model: db.TimeBooking,
-                      as: "timeBookings",
-                      attributes: ["startTime", "endTime"],
-                    },
-                  ],
                   attributes: ["name", "address"],
+                },
+                {
+                  model: db.CourtNumber,
+                  as: "courtNumber",
+                  attributes: ["name"],
+                },
+                {
+                  model: db.TimeBooking,
+                  as: "timeBooking",
+                  attributes: ["startTime", "endTime"],
                 },
               ],
             },
           ],
           ...option,
         });
-        if (!result) {
-          reject({
-            data: null,
-            message: "No schedules booking found",
-          });
-          return;
-        }
         const schedules = result.rows;
         const totalCount = result.count;
-        resolve({
-          data: {
-            content: schedules,
+        return resolve(
+          new BaseResponseList({
+            list: schedules,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
             totalCount,
-          },
-          message: "List of schedules booking retrieved successfully",
-        });
+            message: "List of time bookings retrieved successfully",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -161,22 +161,16 @@ const userBookingService = {
           ],
           ...option,
         });
-        if (!result) {
-          reject({
-            data: null,
-            message: "No schedules booking found",
-          });
-          return;
-        }
         const schedules = result.rows;
         const totalCount = result.count;
-        resolve({
-          data: {
-            content: schedules,
+        return resolve(
+          new BaseResponseList({
+            list: schedules,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
             totalCount,
-          },
-          message: "List of schedules booking retrieved successfully",
-        });
+            message: "List of schedules booking retrieved successfully",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -228,13 +222,17 @@ const userBookingService = {
           }
         );
         if (updatedStatus) {
-          return resolve({
-            message: "Accept user booking successfully",
-          });
+          return resolve(
+            new BaseSuccessResponse({
+              message: "Chấp nhận người đặt lịch thành công",
+            })
+          );
         }
-        return reject({
-          message: "Failed to accept user booking",
-        });
+        return resolve(
+          new BaseErrorResponse({
+            message: "Chấp nhận người đặt lịch thất bại",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
@@ -254,14 +252,17 @@ const userBookingService = {
           { where: { id: userBookingId } }
         );
         if (updatedStatus) {
-          resolve({
-            message: "Cancel user booking successfully",
-          });
-          return;
+          return resolve(
+            new BaseSuccessResponse({
+              message: "Từ chối người đặt lịch thành công",
+            })
+          );
         }
-        reject({
-          message: "Failed to cancel user booking",
-        });
+        return resolve(
+          new BaseErrorResponse({
+            message: "Từ chối người đặt lịch thất bại",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(

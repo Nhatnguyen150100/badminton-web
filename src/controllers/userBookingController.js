@@ -5,11 +5,8 @@ const userBookingController = {
   getBookingsByUser: async (req, res) => {
     try {
       const { id } = req.params;
-      const { data, message } = await userBookingService.getBookingsByUser(
-        id,
-        req.query
-      );
-      res.status(200).json({ message, data });
+      const rs = await userBookingService.getBookingsByUser(id, req.query);
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -17,11 +14,11 @@ const userBookingController = {
   getBookingsByBadmintonCourt: async (req, res) => {
     try {
       const { id } = req.params;
-      const { data, message } = await userBookingService.getBookingByBadmintonCourt(
+      const rs = await userBookingService.getBookingByBadmintonCourt(
         id,
         req.query
       );
-      res.status(200).json({ message, data });
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -29,12 +26,12 @@ const userBookingController = {
   createBooking: async (req, res) => {
     try {
       const { userId, scheduleId, note } = req.body;
-      const { data, message } = await userBookingService.createBooking(
+      const rs = await userBookingService.createBooking(
         userId,
         scheduleId,
         note
       );
-      res.status(200).json({ message, data });
+      res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);
     }
@@ -42,9 +39,7 @@ const userBookingController = {
   changeAcceptUserBooking: async (req, res) => {
     try {
       const { id } = req.params;
-      const { message } = await userBookingService.changeAcceptUserBooking(
-        id,
-      );
+      const { message } = await userBookingService.changeAcceptUserBooking(id);
       res.status(200).json({ message });
     } catch (error) {
       res.status(error.status).json(error);
@@ -53,9 +48,7 @@ const userBookingController = {
   cancelUserBooking: async (req, res) => {
     try {
       const { id } = req.params;
-      const { message } = await userBookingService.cancelUserBooking(
-        id,
-      );
+      const { message } = await userBookingService.cancelUserBooking(id);
       res.status(200).json({ message });
     } catch (error) {
       res.status(error.status).json(error);
@@ -65,12 +58,12 @@ const userBookingController = {
   //   try {
   //     const { id } = req.params;
   //     const { startTime, endTime } = req.body;
-  //     const { data, message } = await timeBookingService.updateTimeBooking(
+  //     const rs = await timeBookingService.updateTimeBooking(
   //       id,
   //       startTime,
   //       endTime
   //     );
-  //     res.status(200).json({ message, data });
+  //     res.status(rs.status).json(rs);
   //   } catch (error) {
   //     res.status(error.status).json(error);
   //   }

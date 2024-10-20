@@ -4,7 +4,11 @@ import db from "../models";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import onRemoveParams from "../utils/remove-params";
-import { BaseErrorResponse, BaseResponseList, BaseSuccessResponse } from "../config/baseReponse";
+import {
+  BaseErrorResponse,
+  BaseResponseList,
+  BaseSuccessResponse,
+} from "../config/baseReponse";
 import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 dayjs.extend(customParseFormat);
 
@@ -169,12 +173,20 @@ const scheduleService = {
   getListSchedule: (badmintonCourtId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { page, limit, nameLike } = data;
+        const { page, limit, nameLike, courtNumberId, timeBookingId, status } =
+          data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
           badmintonCourtId,
         };
-        let queryCourtNumber;
+        if (status) {
+          query = {
+            ...query,
+            status,
+          };
+        }
+        let queryCourtNumber = {};
+        let queryTimeBooking = {};
         if (nameLike) {
           queryCourtNumber = {
             name: {
@@ -182,20 +194,32 @@ const scheduleService = {
             },
           };
         }
+        if (courtNumberId) {
+          queryCourtNumber = {
+            ...queryCourtNumber,
+            id: courtNumberId,
+          };
+        }
+        if (timeBookingId) {
+          queryTimeBooking = {
+            id: timeBookingId,
+          };
+        }
         const option = onRemoveParams(
           {
             include: [
               {
                 model: db.CourtNumber,
-                as: 'courtNumber',
+                as: "courtNumber",
                 attributes: ["name"],
-                where: queryCourtNumber
+                where: queryCourtNumber,
               },
               {
                 model: db.TimeBooking,
-                as: 'timeBooking',
+                as: "timeBooking",
                 attributes: ["startTime", "endTime"],
-              }
+                where: queryTimeBooking,
+              },
             ],
             where: query,
             limit: Number(limit),

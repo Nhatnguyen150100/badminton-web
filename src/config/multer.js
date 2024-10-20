@@ -42,7 +42,9 @@ const storageCourt = multer.diskStorage({
     const uuidRandom = uuidv4();
     const { id } = req.params;
     const createPath = id ?? uuidRandom;
-    const existPath = req?.imageCourt.split("/").pop().split(".")[0];
+    const existPath = req?.imageCourt
+      ? req?.imageCourt.split("/").pop().split(".")[0]
+      : null;
     const extension = path.extname(file.originalname);
     const customName = `${existPath ?? createPath}${extension}`;
     req.imageCourt = `${process.env.BASE_URL_SERVER}/badminton-court/${customName}`;

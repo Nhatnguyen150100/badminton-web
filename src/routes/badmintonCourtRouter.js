@@ -20,7 +20,6 @@ badmintonCourtRouter.get(
   badmintonCourtController.getListBadmintonCourtManager
 );
 
-
 badmintonCourtRouter.get(
   "/:id",
   tokenMiddleware.verifyToken,

@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, where } from "sequelize";
 import logger from "../config/winston";
 import onRemoveParams from "../utils/remove-params";
 import { DEFINE_STATUS } from "../constants/status";
@@ -9,6 +9,7 @@ import {
   BaseSuccessResponse,
 } from "../config/baseReponse";
 import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
+import groupAndMerge from "../utils/group-item";
 
 const { default: db } = require("../models");
 
@@ -77,16 +78,19 @@ const badmintonCourtService = {
     return new Promise(async (resolve, reject) => {
       try {
         const { page, limit, nameLike, status } = data;
-        if(status && !Object.values(DEFINE_STATUS).includes(status)) {
-          return reject(new BaseErrorResponse({
-            message: "Invalid status. Please choose from accepted, pending, or rejected."
-          }));
-        } 
+        if (status && !Object.values(DEFINE_STATUS).includes(status)) {
+          return reject(
+            new BaseErrorResponse({
+              message:
+                "Invalid status. Please choose from accepted, pending, or rejected.",
+            })
+          );
+        }
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {};
-        if(status) {
+        if (status) {
           query = {
-            status
+            status,
           };
         }
         if (nameLike) {
@@ -194,11 +198,24 @@ const badmintonCourtService = {
   getBadmintonCourt: (courtId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const court = await db.BadmintonCourt.findByPk(courtId, { raw: true });
-        if (court) {
+        const courts = await db.BadmintonCourt.findAll({
+          include: [
+            {
+              model: db.User,
+              as: "user",
+              required: false,
+            },
+          ],
+          where: {
+            id: courtId,
+          },
+          raw: true,
+          nest: true,
+        });
+        if (courts[0]) {
           return resolve(
             new BaseSuccessResponse({
-              data: court,
+              data: courts[0],
               message: "Badminton court found successfully",
             })
           );

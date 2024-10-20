@@ -1,4 +1,4 @@
-import badmintonCourtService from "../services/BadmintonCourtService";
+import badmintonCourtService from "../services/badmintonCourtService";
 
 const { DEFINE_STATUS } = require("../constants/status");
 
@@ -13,7 +13,9 @@ const badmintonCourtController = {
   },
   getListBadmintonCourtAdmin: async (req, res) => {
     try {
-      const rs = await badmintonCourtService.getListBadmintonCourtAdmin(req.query);
+      const rs = await badmintonCourtService.getListBadmintonCourtAdmin(
+        req.query
+      );
       res.status(rs.status).json(rs);
     } catch (error) {
       res.status(error.status).json(error);

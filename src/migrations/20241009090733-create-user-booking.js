@@ -11,6 +11,7 @@ module.exports = {
         defaultValue: Sequelize.UUIDV4,
       },
       scheduleId: {
+        allowNull: false,
         type: Sequelize.UUID,
         onDelete: "CASCADE",
         references: {
@@ -22,6 +23,7 @@ module.exports = {
         },
       },
       userId: {
+        allowNull: false,
         type: Sequelize.UUID,
         onDelete: "CASCADE",
         references: {
