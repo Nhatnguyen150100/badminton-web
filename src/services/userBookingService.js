@@ -63,21 +63,25 @@ const userBookingService = {
               model: db.Schedule,
               as: "schedule",
               attributes: ["appointmentDate", "constBooking"],
+              required: false,
               include: [
                 {
                   model: db.BadmintonCourt,
                   as: "badmintonCourt",
-                  attributes: ["name", "address"],
+                  include: [
+                    {
+                      model: db.User,
+                      as: "user",
+                    },
+                  ],
                 },
                 {
                   model: db.CourtNumber,
                   as: "courtNumber",
-                  attributes: ["name"],
                 },
                 {
                   model: db.TimeBooking,
                   as: "timeBooking",
-                  attributes: ["startTime", "endTime"],
                 },
               ],
             },
@@ -116,7 +120,7 @@ const userBookingService = {
           {
             limit: Number(limit),
             offset,
-            attributes: ["status"],
+            attributes: ["id", "status", "note"],
             order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
@@ -139,22 +143,14 @@ const userBookingService = {
               attributes: ["appointmentDate", "constBooking"],
               include: [
                 {
-                  model: db.BadmintonCourt,
-                  as: "badmintonCourt",
-                  where: query,
-                  include: [
-                    {
-                      model: db.CourtNumber,
-                      as: "courtNumbers",
-                      attributes: ["name"],
-                    },
-                    {
-                      model: db.TimeBooking,
-                      as: "timeBookings",
-                      attributes: ["startTime", "endTime"],
-                    },
-                  ],
-                  attributes: [],
+                  model: db.CourtNumber,
+                  as: "courtNumber",
+                  attributes: ["name"],
+                },
+                {
+                  model: db.TimeBooking,
+                  as: "timeBooking",
+                  attributes: ["startTime", "endTime"],
                 },
               ],
             },
@@ -189,10 +185,11 @@ const userBookingService = {
           raw: true,
         });
         if (currentStatus.status === DEFINE_STATUS.CANCELED) {
-          return reject({
-            status: 400,
-            message: "User booking has been canceled",
-          });
+          return resolve(
+            new BaseErrorResponse({
+              message: "Lịch đã bị hủy bởi người đặt",
+            })
+          );
         }
         const status = DEFINE_STATUS.ACCEPTED;
         const otherStatus = DEFINE_STATUS.DENIED;
@@ -243,10 +240,10 @@ const userBookingService = {
       }
     });
   },
-  cancelUserBooking: (userBookingId) => {
+  deniedUserBooking: (userBookingId) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const status = DEFINE_STATUS.CANCELED;
+        const status = DEFINE_STATUS.DENIED;
         const updatedStatus = await db.UserBooking.update(
           { status },
           { where: { id: userBookingId } }

@@ -39,17 +39,20 @@ const userBookingController = {
   changeAcceptUserBooking: async (req, res) => {
     try {
       const { id } = req.params;
-      const { message } = await userBookingService.changeAcceptUserBooking(id);
-      res.status(200).json({ message });
+      const { status, message } =
+        await userBookingService.changeAcceptUserBooking(id);
+      res.status(status).json({ message });
     } catch (error) {
       res.status(error.status).json(error);
     }
   },
-  cancelUserBooking: async (req, res) => {
+  deniedUserBooking: async (req, res) => {
     try {
       const { id } = req.params;
-      const { message } = await userBookingService.cancelUserBooking(id);
-      res.status(200).json({ message });
+      const { status, message } = await userBookingService.deniedUserBooking(
+        id
+      );
+      res.status(status).json({ message });
     } catch (error) {
       res.status(error.status).json(error);
     }
