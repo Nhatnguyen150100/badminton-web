@@ -152,6 +152,13 @@ const userBookingService = {
                   as: "timeBooking",
                   attributes: ["startTime", "endTime"],
                 },
+                {
+                  model: db.BadmintonCourt,
+                  as: "badmintonCourt",
+                  attributes: [],
+                  where: query,
+                  raw: true,
+                },
               ],
             },
           ],
