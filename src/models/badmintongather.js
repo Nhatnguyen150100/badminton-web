@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class BadmintonGather extends Model {
     /**
@@ -29,45 +27,50 @@ module.exports = (sequelize, DataTypes) => {
       });
     }
   }
-  BadmintonGather.init({
-    id: {
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      type: DataTypes.UUID,
+  BadmintonGather.init(
+    {
+      id: {
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        type: DataTypes.UUID,
+      },
+      userId: {
+        allowNull: false,
+        type: DataTypes.UUID,
+      },
+      nameClub: {
+        allowNull: false,
+        type: DataTypes.STRING,
+      },
+      description: {
+        allowNull: false,
+        type: DataTypes.TEXT,
+      },
+      scheduleId: DataTypes.UUID,
+      badmintonCourtName: DataTypes.STRING,
+      lang: DataTypes.DECIMAL(9, 6),
+      lat: DataTypes.DECIMAL(9, 6),
+      courtNumber: DataTypes.STRING,
+      timeBooking: DataTypes.STRING,
+      appointmentDate: DataTypes.DATE,
+      totalMale: DataTypes.INTEGER,
+      totalFemale: DataTypes.INTEGER,
+      constPerMale: DataTypes.INTEGER,
+      constPerFemale: DataTypes.INTEGER,
+      imgCourt: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      level: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
-    userId: {
-      allowNull: false,
-      type: DataTypes.UUID
-    },
-    nameClub: {
-      allowNull: false,
-      type: DataTypes.STRING,
-    },
-    description: {
-      allowNull: false,
-      type: DataTypes.TEXT,
-    },
-    scheduleId: DataTypes.UUID,
-    badmintonCourtName: DataTypes.STRING,
-    courtNumber: DataTypes.STRING,
-    timeBooking: DataTypes.STRING,
-    appointmentDate: DataTypes.DATE,
-    totalMale: DataTypes.INTEGER,
-    totalFemale: DataTypes.INTEGER,
-    constPerMale: DataTypes.INTEGER,
-    constPerFemale: DataTypes.INTEGER,
-    imgCourt: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    level: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    {
+      sequelize,
+      modelName: "BadmintonGather",
     }
-  }, {
-    sequelize,
-    modelName: 'BadmintonGather',
-  });
+  );
   return BadmintonGather;
 };
