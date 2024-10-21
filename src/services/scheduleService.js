@@ -173,8 +173,15 @@ const scheduleService = {
   getListSchedule: (badmintonCourtId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { page, limit, nameLike, courtNumberId, timeBookingId, status } =
-          data;
+        const {
+          page,
+          limit,
+          nameLike,
+          courtNumberId,
+          timeBookingId,
+          status,
+          appointmentDate,
+        } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
           badmintonCourtId,
@@ -183,6 +190,12 @@ const scheduleService = {
           query = {
             ...query,
             status,
+          };
+        }
+        if (appointmentDate) {
+          query = {
+            ...query,
+            appointmentDate: dayjs(appointmentDate).toDate(),
           };
         }
         let queryCourtNumber = {};

@@ -52,10 +52,11 @@ const userBookingService = {
   getBookingsByUser: (userId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { page, limit } = data;
+        const { page, limit, appointmentDate } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
           userId,
+          appointmentDate
         };
         const option = onRemoveParams(
           {
