@@ -1,0 +1,85 @@
+'use strict';
+/** @type {import('sequelize-cli').Migration} */
+module.exports = {
+  async up(queryInterface, Sequelize) {
+    await queryInterface.createTable('BadmintonGathers', {
+      id: {
+        allowNull: false,
+        primaryKey: true,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
+      },
+      userId: {
+        allowNull: false,
+        type: Sequelize.UUID,
+        onDelete: "CASCADE",
+        references: {
+          model: {
+            tableName: "Users",
+            name: "userId",
+          },
+          key: "id",
+        },
+      },
+      nameClub: {
+        type: Sequelize.STRING
+      },
+      description: {
+        type: Sequelize.TEXT
+      },
+      scheduleId: {
+        allowNull: true,
+        type: Sequelize.UUID,
+        onDelete: "CASCADE",
+        references: {
+          model: {
+            tableName: "Schedules",
+            name: "scheduleId",
+          },
+          key: "id",
+        },
+      },
+      badmintonCourtName: {
+        type: Sequelize.STRING
+      },
+      courtNumber: {
+        type: Sequelize.STRING
+      },
+      timeBooking: {
+        type: Sequelize.STRING
+      },
+      appointmentDate: {
+        type: Sequelize.DATE
+      },
+      totalMale: {
+        type: Sequelize.INTEGER
+      },
+      totalFemale: {
+        type: Sequelize.INTEGER
+      },
+      constPerMale: {
+        type: Sequelize.INTEGER
+      },
+      constPerFemale: {
+        type: Sequelize.INTEGER
+      },
+      imgCourt: {
+        type: Sequelize.STRING
+      },
+      level: {
+        type: Sequelize.STRING
+      },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE
+      }
+    });
+  },
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('BadmintonGathers');
+  }
+};

@@ -23,6 +23,27 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         hooks: true
       });
+      User.hasMany(models.BadmintonGather, {
+        foreignKey: "userId",
+        as: "badmintonGathers",
+        sourceKey: "id",
+        onDelete: "CASCADE",
+        hooks: true
+      });
+      User.hasMany(models.BadmintonGatherBooking, {
+        foreignKey: "userId",
+        as: "badmintonGatherBookings",
+        sourceKey: "id",
+        onDelete: "CASCADE",
+        hooks: true
+      });
+      User.hasMany(models.BadmintonGatherComment, {
+        foreignKey: "userId",
+        as: "badmintonGatherComments",
+        sourceKey: "id",
+        onDelete: "CASCADE",
+        hooks: true
+      });
     }
   }
   User.init(

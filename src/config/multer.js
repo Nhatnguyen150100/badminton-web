@@ -52,6 +52,37 @@ const storageCourt = multer.diskStorage({
   },
 });
 
+const uploadDirBadmintonGather = path.join(
+  __dirname,
+  "..",
+  "..",
+  "public",
+  "badminton-gather"
+);
+if (!fs.existsSync(uploadDirBadmintonGather)) {
+  fs.mkdirSync(uploadDirBadmintonGather);
+}
+
+const storageBadmintonGather = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, uploadDirBadmintonGather);
+  },
+  filename: (req, file, cb) => {
+    const uuidRandom = uuidv4();
+    const { id } = req.params;
+    const createPath = id ?? uuidRandom;
+    const existPath = req?.imageCourt
+      ? req?.imageCourt.split("/").pop().split(".")[0]
+      : null;
+    const extension = path.extname(file.originalname);
+    const customName = `${existPath ?? createPath}${extension}`;
+    req.imageCourt = `${process.env.BASE_URL_SERVER}/badminton-gather/${customName}`;
+    cb(null, customName);
+  },
+});
+
 const uploadImgCourt = multer({ storage: storageCourt });
 
-export { uploadAvatar, uploadImgCourt };
+const uploadBadmintonGather = multer({ storage: storageBadmintonGather });
+
+export { uploadAvatar, uploadImgCourt, uploadBadmintonGather };

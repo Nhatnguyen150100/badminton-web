@@ -33,6 +33,13 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: "CASCADE",
         hooks: true
       });
+      Schedule.hasMany(models.BadmintonGather, {
+        foreignKey: "scheduleId",
+        as: "badmintonGather",
+        sourceKey: "id",
+        onDelete: "CASCADE",
+        hooks: true
+      });
     }
   }
   Schedule.init({
