@@ -14,6 +14,19 @@ const userBookingService = {
   createBooking: (userId, scheduleId, note) => {
     return new Promise(async (resolve, reject) => {
       try {
+        const checkIsBooking = await db.UserBooking.findOne({
+          where: {
+            userId,
+            scheduleId,
+          },
+        });
+        if (checkIsBooking) {
+          return reject(
+            new BaseErrorResponse({
+              message: "Bạn đã đặt lịch cho ngày này",
+            })
+          );
+        }
         const newBooking = await db.UserBooking.create({
           userId,
           scheduleId,
@@ -47,7 +60,7 @@ const userBookingService = {
         const option = onRemoveParams(
           {
             where: query,
-            attributes: ["status"],
+            attributes: ["id", "status", "note"],
             limit: Number(limit),
             offset,
             order: [["createdAt", "DESC"]],
@@ -209,8 +222,8 @@ const userBookingService = {
           {
             where: {
               scheduleId: currentStatus.scheduleId,
-              status: {
-                [Op.ne]: status,
+              id: {
+                [Op.ne]: userBookingId,
               },
             },
           }
@@ -265,6 +278,47 @@ const userBookingService = {
         return resolve(
           new BaseErrorResponse({
             message: "Từ chối người đặt lịch thất bại",
+          })
+        );
+      } catch (error) {
+        logger.error(error.message);
+        reject(
+          new BaseErrorResponse({
+            message: error.message,
+          })
+        );
+      }
+    });
+  },
+  cancelUserBooking: (userBookingId) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const currentStatus = await db.UserBooking.findOne({
+          where: { id: userBookingId },
+          raw: true,
+        });
+        if (currentStatus.status === DEFINE_STATUS.ACCEPTED) {
+          return resolve(
+            new BaseErrorResponse({
+              message: "Lịch đã được chấp nhận bởi người đặt",
+            })
+          );
+        }
+        const status = DEFINE_STATUS.CANCELED;
+        const updatedStatus = await db.UserBooking.update(
+          { status },
+          { where: { id: userBookingId } }
+        );
+        if (updatedStatus) {
+          return resolve(
+            new BaseSuccessResponse({
+              message: "Hủy lịch thành công",
+            })
+          );
+        }
+        return resolve(
+          new BaseErrorResponse({
+            message: "Hủy lịch thất bại",
           })
         );
       } catch (error) {

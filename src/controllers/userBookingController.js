@@ -57,29 +57,17 @@ const userBookingController = {
       res.status(error.status).json(error);
     }
   },
-  // updateTimeBooking: async (req, res) => {
-  //   try {
-  //     const { id } = req.params;
-  //     const { startTime, endTime } = req.body;
-  //     const rs = await timeBookingService.updateTimeBooking(
-  //       id,
-  //       startTime,
-  //       endTime
-  //     );
-  //     res.status(rs.status).json(rs);
-  //   } catch (error) {
-  //     res.status(error.status).json(error);
-  //   }
-  // },
-  // deleteTimeBooking: async (req, res) => {
-  //   try {
-  //     const { id } = req.params;
-  //     const { message } = await timeBookingService.deleteTimeBooking(id);
-  //     res.status(200).json({ message });
-  //   } catch (error) {
-  //     res.status(error.status).json(error);
-  //   }
-  // },
+  cancelUserBooking: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { status, message } = await userBookingService.cancelUserBooking(
+        id
+      );
+      res.status(status).json({ message });
+    } catch (error) {
+      res.status(error.status).json(error);
+    }
+  }
 };
 
 export default userBookingController;

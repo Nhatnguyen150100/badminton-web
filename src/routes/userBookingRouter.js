@@ -34,4 +34,10 @@ userBookingRouter.put(
   userBookingController.deniedUserBooking
 );
 
+userBookingRouter.put(
+  "/cancel-booking/:id",
+  tokenMiddleware.verifyToken,
+  userBookingController.cancelUserBooking
+);
+
 export default userBookingRouter;

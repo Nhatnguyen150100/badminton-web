@@ -7,14 +7,14 @@ const authController = {
   login: async (req, res) => {
     try {
       const { email, password } = req.body;
-      const { data, message } = await authService.login(email, password);
-      if (!data) {
-        return res.status(400).json({ message });
+      const rs = await authService.login(email, password);
+      if (!rs.data) {
+        return res.status(rs.status).json({ message: rs.message });
       }
-      const accessToken = tokenService.generateToken(data);
-      res.status(200).json({
-        message: message,
-        data: { ...data, accessToken: accessToken },
+      const accessToken = tokenService.generateToken(rs.data);
+      res.status(rs.status).json({
+        message: rs.message,
+        data: { ...rs.data, accessToken: accessToken },
       });
     } catch (error) {
       logger.error(error.message);
@@ -24,11 +24,8 @@ const authController = {
   register: async (req, res) => {
     try {
       const { email, password } = req.body;
-      const { data, message } = await authService.register(email, password);
-      if (!data) {
-        return res.status(400).json({ message });
-      }
-      res.status(201).json({ message, data });
+      const rs = await authService.register(email, password);
+      res.status(rs.status).json(rs);
     } catch (error) {
       logger.error(error.message);
       res.status(error.status).json(error);

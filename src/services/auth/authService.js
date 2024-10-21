@@ -3,6 +3,10 @@ import bcrypt from "bcrypt";
 import logger from "../../config/winston";
 import db from "../../models";
 import ROLE_DEFINE from "../../constants/role";
+import {
+  BaseErrorResponse,
+  BaseSuccessResponse,
+} from "../../config/baseReponse";
 
 const authService = {
   login: (email, password) => {
@@ -13,23 +17,27 @@ const authService = {
           raw: true,
         });
         if (!user || Object.keys(user).length === 0) {
-          resolve({
-            data: null,
-            message: "We couldn't find your email address",
-          });
+          return resolve(
+            new BaseErrorResponse({
+              message: "Không tìm thấy tài khoản phù hợp. Hãy thử lại!",
+            })
+          );
         }
         const validPassword = await bcrypt.compare(password, user.password);
         if (!validPassword) {
-          resolve({
-            data: null,
-            message: "Incorrect password",
-          });
+          return resolve(
+            new BaseErrorResponse({
+              message: "Sai mật khẩu. Hãy thử lại!",
+            })
+          );
         } else {
           delete user.password;
-          resolve({
-            data: user,
-            message: "Đăng nhập thành công",
-          });
+          return resolve(
+            new BaseSuccessResponse({
+              data: user,
+              message: "Đăng nhập thành công",
+            })
+          );
         }
       } catch (error) {
         logger.error(error.message);
@@ -51,10 +59,12 @@ const authService = {
           role: ROLE_DEFINE.USER,
         });
         delete newUser.dataValues.password;
-        resolve({
-          data: newUser,
-          message: "Registration successfully",
-        });
+        return resolve(
+          new BaseSuccessResponse({
+            data: newUser,
+            message: "Đăng kí thành công",
+          })
+        );
       } catch (error) {
         logger.error(error.parent);
         reject(
@@ -72,15 +82,19 @@ const authService = {
           where: { email: email },
         });
         if (user) {
-          resolve({
-            data: true,
-            message: "Email already exists",
-          });
+          return resolve(
+            new BaseSuccessResponse({
+              data: true,
+              message: "Email đã tồn tại",
+            })
+          );
         } else {
-          resolve({
-            data: false,
-            message: "Email available",
-          });
+          return resolve(
+            new BaseSuccessResponse({
+              data: false,
+              message: "Email chưa tồn tại",
+            })
+          );
         }
       } catch (error) {
         logger.error(error.message);
