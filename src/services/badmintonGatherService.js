@@ -24,6 +24,8 @@ const badmintonGatherService = {
         //   timeBooking,
         //   appointmentDate,
         //   totalMale,
+        //    lang,
+        //    lat,
         //   totalFemale,
         //   constPerMale,
         //   constPerFemale,
@@ -172,3 +174,5 @@ const badmintonGatherService = {
     });
   },
 };
+
+export default badmintonGatherService;

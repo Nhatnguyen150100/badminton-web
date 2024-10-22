@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('BadmintonGatherBookings', {
+    await queryInterface.createTable("BadmintonGatherBookings", {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -34,28 +34,30 @@ module.exports = {
         },
       },
       numberMale: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       numberFemale: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
       },
       note: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       status: {
-        type: Sequelize.STRING
+        allowNull: false,
+        type: Sequelize.STRING,
+        defaultValue: "PENDING_APPROVAL",
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('BadmintonGatherBookings');
-  }
+    await queryInterface.dropTable("BadmintonGatherBookings");
+  },
 };
