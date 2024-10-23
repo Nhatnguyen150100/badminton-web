@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Schedule extends Model {
     /**
@@ -13,17 +11,17 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Schedule.belongsTo(models.BadmintonCourt, {
         foreignKey: { name: "badmintonCourtId", allowNull: false },
-        as: 'badmintonCourt',
+        as: "badmintonCourt",
         targetKey: "id",
       });
       Schedule.belongsTo(models.TimeBooking, {
         foreignKey: { name: "timeBookingId", allowNull: false },
-        as: 'timeBooking',
+        as: "timeBooking",
         targetKey: "id",
       });
       Schedule.belongsTo(models.CourtNumber, {
         foreignKey: { name: "courtNumberId", allowNull: false },
-        as: 'courtNumber',
+        as: "courtNumber",
         targetKey: "id",
       });
       Schedule.hasMany(models.UserBooking, {
@@ -31,33 +29,36 @@ module.exports = (sequelize, DataTypes) => {
         as: "userBookings",
         sourceKey: "id",
         onDelete: "CASCADE",
-        hooks: true
+        hooks: true,
       });
-      Schedule.hasMany(models.BadmintonGather, {
+      Schedule.hasOne(models.BadmintonGather, {
         foreignKey: "scheduleId",
         as: "badmintonGather",
         sourceKey: "id",
         onDelete: "CASCADE",
-        hooks: true
+        hooks: true,
       });
     }
   }
-  Schedule.init({
-    id: {
-      allowNull: false,
-      defaultValue: DataTypes.UUIDV4,
-      primaryKey: true,
-      type: DataTypes.UUID,
+  Schedule.init(
+    {
+      id: {
+        allowNull: false,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        type: DataTypes.UUID,
+      },
+      badmintonCourtId: DataTypes.UUID,
+      courtNumberId: DataTypes.UUID,
+      timeBookingId: DataTypes.UUID,
+      appointmentDate: DataTypes.DATE,
+      constBooking: DataTypes.INTEGER,
+      status: DataTypes.STRING,
     },
-    badmintonCourtId: DataTypes.UUID,
-    courtNumberId: DataTypes.UUID,
-    timeBookingId: DataTypes.UUID,
-    appointmentDate: DataTypes.DATE,
-    constBooking: DataTypes.INTEGER,
-    status: DataTypes.STRING,
-  }, {
-    sequelize,
-    modelName: 'Schedule',
-  });
+    {
+      sequelize,
+      modelName: "Schedule",
+    }
+  );
   return Schedule;
 };

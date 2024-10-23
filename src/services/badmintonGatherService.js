@@ -14,24 +14,6 @@ const badmintonGatherService = {
   createBadmintonGather: (data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        // const {
-        //   userId,
-        //   nameClub,
-        //   description,
-        //   scheduleId,
-        //   badmintonCourtName,
-        //   courtNumber,
-        //   timeBooking,
-        //   appointmentDate,
-        //   totalMale,
-        //    lang,
-        //    lat,
-        //   totalFemale,
-        //   constPerMale,
-        //   constPerFemale,
-        //   imgCourt,
-        //   level,
-        // } = data;
         const { userId, scheduleId } = data;
         const userBooking = await db.UserBooking.findOne({
           where: {
@@ -127,12 +109,14 @@ const badmintonGatherService = {
       }
     });
   },
-  getBadmintonGathersByUserId: (userId, data) => {
+  getListBadmintonGathersByUserId: (userId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
         const { page, limit, nameLike } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
-        let query = {};
+        let query = {
+          userId,
+        };
         if (nameLike) {
           query = {
             name: {
@@ -158,6 +142,108 @@ const badmintonGatherService = {
         return resolve(
           new BaseResponseList({
             list,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
+            totalCount,
+            message: "List of courts retrieved successfully",
+          })
+        );
+      } catch (error) {
+        logger.error(error.message);
+        reject(
+          new BaseErrorResponse({
+            message: error.message,
+          })
+        );
+      }
+    });
+  },
+  getBadmintonGatherDetail: (id) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const result = await db.BadmintonGather.findByPk(id, { raw: true });
+        if (!result) {
+          return reject(
+            new BaseErrorResponse({
+              message: "Lịch giao lưu không tồn tại",
+            })
+          );
+        }
+        return resolve(
+          new BaseSuccessResponse({
+            data: result,
+            message: "Detail of gather retrieved successfully",
+          })
+        );
+      } catch (error) {
+        logger.error(error.message);
+        reject(
+          new BaseErrorResponse({
+            message: error.message,
+          })
+        );
+      }
+    });
+  },
+  getListBadmintonGather: (data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { page, limit, nameLike, district, ward } = data;
+        let offset = page && limit ? (page - 1) * limit : undefined;
+        let query = {};
+        if (nameLike) {
+          query = {
+            name: {
+              [Op.like]: `%${nameLike}%`,
+            },
+          };
+        }
+        if (district) {
+          query = {
+            ...query,
+            district,
+          };
+        }
+        if (ward) {
+          query = {
+            ...query,
+            ward,
+          };
+        }
+        const option = onRemoveParams(
+          {
+            include: [
+              {
+                model: db.Schedule,
+                as: "badmintonGather",
+                required: false,
+                nest: true,
+                include: [
+                  {
+                    model: db.BadmintonCourt,
+                    as: "badmintonCourt",
+                    required: false,
+                    where: query,
+                    raw: true,
+                  },
+                ],
+              },
+            ],
+            where: query,
+            limit: Number(limit),
+            offset,
+            order: [["createdAt", "DESC"]],
+            raw: true,
+            nest: true,
+            distinct: true,
+          },
+          [0]
+        );
+        const result = await db.BadmintonGather.findAndCountAll(option);
+        const court = result.rows;
+        const totalCount = result.count;
+        return resolve(
+          new BaseResponseList({
+            list: court,
             status: DEFINE_STATUS_RESPONSE.SUCCESS,
             totalCount,
             message: "List of courts retrieved successfully",

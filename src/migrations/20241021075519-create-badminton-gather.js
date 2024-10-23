@@ -42,6 +42,15 @@ module.exports = {
       badmintonCourtName: {
         type: Sequelize.STRING,
       },
+      district: {
+        type: Sequelize.STRING,
+      },
+      ward: {
+        type: Sequelize.STRING,
+      },
+      address: {
+        type: Sequelize.STRING,
+      },
       courtNumber: {
         type: Sequelize.STRING,
       },
