@@ -8,14 +8,14 @@ const badmintonGatherRouter = express.Router();
 badmintonGatherRouter.post(
   "/",
   tokenMiddleware.verifyToken,
-  uploadBadmintonGather.single("imageCourt"),
+  uploadBadmintonGather.single("imgCourt"),
   badmintonGatherController.createBadmintonGather
 );
 
 badmintonGatherRouter.put(
   "/:id",
   tokenMiddleware.verifyToken,
-  uploadBadmintonGather.single("imageCourt"),
+  uploadBadmintonGather.single("imgCourt"),
   badmintonGatherController.updateBadmintonGather
 );
 
