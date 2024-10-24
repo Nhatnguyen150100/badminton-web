@@ -15,23 +15,7 @@ const badmintonGatherService = {
     return new Promise(async (resolve, reject) => {
       try {
         const { userId, scheduleId } = data;
-        const userBooking = await db.UserBooking.findOne({
-          where: {
-            userId,
-            scheduleId,
-            status: {
-              [Op.ne]: DEFINE_STATUS.ACCEPTED,
-            },
-          },
-        });
-        if (!userBooking) {
-          return reject(
-            new BaseErrorResponse({
-              message: "Bạn không có quyền đặt lịch cho thời điểm này",
-            })
-          );
-        }
-        const created = await db.BadmintonGather.create(data);
+        const created = await db.BadmintonGather.create(onRemoveParams(data));
         if (created) {
           return resolve(
             new BaseSuccessResponse({
@@ -211,23 +195,6 @@ const badmintonGatherService = {
         }
         const option = onRemoveParams(
           {
-            include: [
-              {
-                model: db.Schedule,
-                as: "badmintonGather",
-                required: false,
-                nest: true,
-                include: [
-                  {
-                    model: db.BadmintonCourt,
-                    as: "badmintonCourt",
-                    required: false,
-                    where: query,
-                    raw: true,
-                  },
-                ],
-              },
-            ],
             where: query,
             limit: Number(limit),
             offset,

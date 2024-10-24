@@ -9,10 +9,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      BadmintonGather.belongsTo(models.Schedule, {
-        foreignKey: { name: "scheduleId", allowNull: false },
-        targetKey: "id",
-      });
       BadmintonGather.belongsTo(models.User, {
         foreignKey: { name: "userId", allowNull: false },
         as: "user",
@@ -47,7 +43,6 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         type: DataTypes.TEXT,
       },
-      scheduleId: DataTypes.UUID,
       badmintonCourtName: DataTypes.STRING,
       district: DataTypes.STRING,
       ward: DataTypes.STRING,
@@ -55,7 +50,8 @@ module.exports = (sequelize, DataTypes) => {
       lang: DataTypes.DECIMAL(9, 6),
       lat: DataTypes.DECIMAL(9, 6),
       courtNumber: DataTypes.STRING,
-      timeBooking: DataTypes.STRING,
+      startTime: DataTypes.STRING,
+      endTime: DataTypes.STRING,
       appointmentDate: DataTypes.DATE,
       totalMale: DataTypes.INTEGER,
       totalFemale: DataTypes.INTEGER,

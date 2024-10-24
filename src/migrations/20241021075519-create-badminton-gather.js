@@ -27,18 +27,6 @@ module.exports = {
       description: {
         type: Sequelize.TEXT,
       },
-      scheduleId: {
-        allowNull: true,
-        type: Sequelize.UUID,
-        onDelete: "CASCADE",
-        references: {
-          model: {
-            tableName: "Schedules",
-            name: "scheduleId",
-          },
-          key: "id",
-        },
-      },
       badmintonCourtName: {
         type: Sequelize.STRING,
       },
@@ -54,7 +42,10 @@ module.exports = {
       courtNumber: {
         type: Sequelize.STRING,
       },
-      timeBooking: {
+      startTime: {
+        type: Sequelize.STRING,
+      },
+      endTime: {
         type: Sequelize.STRING,
       },
       appointmentDate: {
