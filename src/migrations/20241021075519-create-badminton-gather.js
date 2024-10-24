@@ -63,6 +63,9 @@ module.exports = {
       constPerFemale: {
         type: Sequelize.INTEGER,
       },
+      priceNegotiable: {
+        type: Sequelize.BOOLEAN,
+      },
       lang: {
         type: Sequelize.DECIMAL(9, 6),
       },
