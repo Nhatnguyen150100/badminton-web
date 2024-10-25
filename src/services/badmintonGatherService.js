@@ -9,6 +9,7 @@ import db from "../models";
 import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 import onRemoveParams from "../utils/remove-params";
 import { DEFINE_STATUS } from "../constants/status";
+import groupAndMerge from "../utils/group-item";
 
 const badmintonGatherService = {
   createBadmintonGather: (data) => {
@@ -144,7 +145,35 @@ const badmintonGatherService = {
   getBadmintonGatherDetail: (id) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const result = await db.BadmintonGather.findByPk(id, { raw: true });
+        const result = await db.BadmintonGather.findAll({
+          include: [
+            {
+              model: db.User,
+              as: "user",
+              required: true,
+            },
+            {
+              model: db.BadmintonGatherComment,
+              as: "badmintonGatherComments",
+              required: false,
+              order: [["order", "ASC"]],
+              include: [{
+                model: db.User,
+                as: "user",
+                required: true,
+              }],
+            },
+          ],
+          where: { id },
+          nest: true,
+          raw: true,
+        });
+        const groupedResults = groupAndMerge(
+          result,
+          "id",
+          "badmintonGatherComments"
+        );
+        const finalResult = groupedResults[0];
         if (!result) {
           return reject(
             new BaseErrorResponse({
@@ -154,7 +183,7 @@ const badmintonGatherService = {
         }
         return resolve(
           new BaseSuccessResponse({
-            data: result,
+            data: finalResult,
             message: "Detail of gather retrieved successfully",
           })
         );

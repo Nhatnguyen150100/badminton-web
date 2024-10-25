@@ -15,8 +15,15 @@ module.exports = (sequelize, DataTypes) => {
         targetKey: "id",
       });
       BadmintonGather.hasMany(models.BadmintonGatherBooking, {
-        foreignKey: "badmintonCourtId",
+        foreignKey: "badmintonGatherId",
         as: "badmintonGatherBookings",
+        sourceKey: "id",
+        onDelete: "CASCADE",
+        hooks: true,
+      });
+      BadmintonGather.hasMany(models.BadmintonGatherComment, {
+        foreignKey: "badmintonGatherId",
+        as: "badmintonGatherComments",
         sourceKey: "id",
         onDelete: "CASCADE",
         hooks: true,

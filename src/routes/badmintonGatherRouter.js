@@ -39,7 +39,6 @@ badmintonGatherRouter.get(
 
 badmintonGatherRouter.get(
   "/",
-  tokenMiddleware.verifyToken,
   badmintonGatherController.getListBadmintonGather
 );
 

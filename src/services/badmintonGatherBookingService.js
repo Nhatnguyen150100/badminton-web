@@ -1,4 +1,5 @@
-import { BaseErrorResponse, BaseSuccessResponse } from "../config/baseReponse";
+import { BaseErrorResponse, BaseResponseList, BaseSuccessResponse } from "../config/baseReponse";
+import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 import logger from "../config/winston";
 import { DEFINE_STATUS } from "../constants/status";
 import db from "../models";
@@ -140,6 +141,108 @@ const badmintonGatherBookingService = {
       }
     });
   },
+  getGatherBookingByUserId: (userId, data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { page, limit } = data;
+        let offset = page && limit ? (page - 1) * limit : undefined;
+        let query = {
+          userId,
+        };
+        const option = onRemoveParams(
+          {
+            where: query,
+            limit: Number(limit),
+            offset,
+            attributes: ["id", "status", "note"],
+            order: [["createdAt", "DESC"]],
+            raw: true,
+            nest: true,
+            distinct: true,
+          },
+          [0]
+        );
+        const result = await db.BadmintonGatherBooking.findAndCountAll({
+          include: [
+            {
+              model: db.BadmintonGather,
+              as: "badmintonGather",
+              required: true,
+            },
+          ],
+          ...option
+        });
+        const list = result.rows;
+        const totalCount = result.count;
+        return resolve(
+          new BaseResponseList({
+            list,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
+            totalCount,
+            message: "List of booking retrieved successfully",
+          })
+        );
+      } catch (error) {
+        logger.error(error.message);
+        reject(
+          new BaseErrorResponse({
+            message: error.message,
+          })
+        );
+      }
+    });
+  },
+  getGatherBookingByOwner: (badmintonGatherId, data) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const { page, limit } = data;
+        let offset = page && limit ? (page - 1) * limit : undefined;
+        let query = {
+          badmintonGatherId,
+        };
+        const option = onRemoveParams(
+          {
+            where: query,
+            limit: Number(limit),
+            offset,
+            attributes: ["id", "status", "note"],
+            order: [["createdAt", "DESC"]],
+            raw: true,
+            nest: true,
+            distinct: true,
+          },
+          [0]
+        );
+        const result = await db.BadmintonGatherBooking.findAndCountAll({
+          ...option,
+          include: [
+            {
+              model: db.User,
+              as: "user",
+              required: true,
+            },
+          ],
+        });
+        const list = result.rows;
+        const totalCount = result.count;
+        return resolve(
+          new BaseResponseList({
+            list,
+            status: DEFINE_STATUS_RESPONSE.SUCCESS,
+            totalCount,
+            message: "List of booking retrieved successfully",
+          })
+        );
+      } catch (error) {
+        logger.error(error.message);
+        reject(
+          new BaseErrorResponse({
+            message: error.message,
+          })
+        );
+      }
+    });
+  }
 };
 
 export default badmintonGatherBookingService;
