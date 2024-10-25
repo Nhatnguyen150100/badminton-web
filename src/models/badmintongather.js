@@ -57,7 +57,10 @@ module.exports = (sequelize, DataTypes) => {
       totalFemale: DataTypes.INTEGER,
       constPerMale: DataTypes.INTEGER,
       constPerFemale: DataTypes.INTEGER,
-      priceNegotiable: DataTypes.BOOLEAN,
+      priceNegotiable: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       imgCourt: {
         type: DataTypes.STRING,
         allowNull: false,

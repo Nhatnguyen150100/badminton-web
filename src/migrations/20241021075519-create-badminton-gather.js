@@ -65,6 +65,7 @@ module.exports = {
       },
       priceNegotiable: {
         type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
       lang: {
         type: Sequelize.DECIMAL(9, 6),

@@ -22,8 +22,10 @@ const badmintonGatherController = {
         ward,
         address,
         level,
+        priceNegotiable,
+        imgCourt: imgCourtReq
       } = req.body;
-      const imgCourt = req.imgCourt;
+      const imgCourt = imgCourtReq ?? req.imgCourt;
       const rs = await badmintonGatherService.createBadmintonGather({
         userId,
         nameClub,
@@ -39,10 +41,11 @@ const badmintonGatherController = {
         totalFemale,
         constPerMale,
         constPerFemale,
-        level,
         district,
         ward,
         address,
+        level,
+        priceNegotiable,
         imgCourt,
       });
       res.status(rs.status).json(rs);
@@ -67,12 +70,14 @@ const badmintonGatherController = {
         totalFemale,
         constPerMale,
         constPerFemale,
+        priceNegotiable,
         district,
         ward,
         address,
         level,
+        imgCourt: imgCourtReq
       } = req.body;
-      const imgCourt = req.imgCourt;
+      const imgCourt = imgCourtReq ?? req.imgCourt;
       const rs = await badmintonGatherService.updateBadmintonGather(id, {
         nameClub,
         description,
@@ -87,6 +92,7 @@ const badmintonGatherController = {
         totalFemale,
         constPerMale,
         constPerFemale,
+        priceNegotiable,
         level,
         district,
         ward,

@@ -52,15 +52,16 @@ const userBookingService = {
   getBookingsByUser: (userId, data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { page, limit, appointmentDate } = data;
+        const { page, limit, appointmentDate, status } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {
           userId,
-          appointmentDate
+          appointmentDate,
+          status
         };
         const option = onRemoveParams(
           {
-            where: query,
+            where:  onRemoveParams(query, [0]),
             attributes: ["id", "status", "note"],
             limit: Number(limit),
             offset,
