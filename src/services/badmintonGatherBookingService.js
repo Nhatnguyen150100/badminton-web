@@ -1,8 +1,13 @@
-import { BaseErrorResponse, BaseResponseList, BaseSuccessResponse } from "../config/baseReponse";
+import {
+  BaseErrorResponse,
+  BaseResponseList,
+  BaseSuccessResponse,
+} from "../config/baseReponse";
 import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 import logger from "../config/winston";
 import { DEFINE_STATUS } from "../constants/status";
 import db from "../models";
+import onRemoveParams from "../utils/remove-params";
 
 const badmintonGatherBookingService = {
   createGatherBooking: (badmintonGatherId, data) => {
@@ -58,7 +63,7 @@ const badmintonGatherBookingService = {
         const badmintonGather = await db.BadmintonGatherBooking.findOne({
           where: { id: gatherBookingId },
           raw: true,
-          nested: true,
+          nest: true,
           include: [
             {
               model: db.BadmintonGather,
@@ -66,15 +71,35 @@ const badmintonGatherBookingService = {
             },
           ],
         });
+        if (
+          badmintonGather.numberMale > badmintonGather.badmintonGather.totalMale
+        ) {
+          return reject(
+            new BaseErrorResponse({
+              message:
+                "Số người nam đã đăng ký vượt quá số người tối đa cho phép",
+            })
+          );
+        }
+        if (
+          badmintonGather.numberFemale >
+          badmintonGather.badmintonGather.totalFemale
+        ) {
+          return reject(
+            new BaseErrorResponse({
+              message:
+                "Số người nữ đã đăng ký vượt quá số người tối đa cho phép",
+            })
+          );
+        }
         const status = DEFINE_STATUS.ACCEPTED;
         const updated = await db.BadmintonGatherBooking.update(
           { status },
           {
             where: { id: gatherBookingId },
-            returning: true,
           }
         );
-        await db.BadmintonGather.update(
+        const updatedGather = await db.BadmintonGather.update(
           {
             totalMale:
               badmintonGather.badmintonGather.totalMale -
@@ -87,7 +112,7 @@ const badmintonGatherBookingService = {
             where: { id: badmintonGather.badmintonGather.id },
           }
         );
-        if (updated[0] > 0) {
+        if (updated[0] > 0 && updatedGather[0] > 0) {
           return resolve(
             new BaseSuccessResponse({
               message: "Chấp nhận thông tin tham gia thành công",
@@ -170,7 +195,7 @@ const badmintonGatherBookingService = {
               required: true,
             },
           ],
-          ...option
+          ...option,
         });
         const list = result.rows;
         const totalCount = result.count;
@@ -205,7 +230,6 @@ const badmintonGatherBookingService = {
             where: query,
             limit: Number(limit),
             offset,
-            attributes: ["id", "status", "note"],
             order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
@@ -242,7 +266,7 @@ const badmintonGatherBookingService = {
         );
       }
     });
-  }
+  },
 };
 
 export default badmintonGatherBookingService;

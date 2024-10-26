@@ -4,7 +4,6 @@ import tokenMiddleware from "../middleware/tokenMiddleware";
 import badmintonGatherBookingController from "../controllers/badmintonGatherBookingController";
 const badmintonGatherBookingRouter = express.Router();
 
-
 badmintonGatherBookingRouter.post(
   "/",
   tokenMiddleware.verifyToken,
@@ -21,6 +20,18 @@ badmintonGatherBookingRouter.put(
   "/denied-gather-booking/:id",
   tokenMiddleware.verifyToken,
   badmintonGatherBookingController.deniedGatherBooking
+);
+
+badmintonGatherBookingRouter.get(
+  "/by-owner/:id",
+  tokenMiddleware.verifyToken,
+  badmintonGatherBookingController.getGatherBookingByOwner
+);
+
+badmintonGatherBookingRouter.get(
+  "/by-user/:id",
+  tokenMiddleware.verifyToken,
+  badmintonGatherBookingController.getGatherBookingByUserId
 );
 
 // badmintonGatherBookingRouter.delete(
