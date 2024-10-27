@@ -179,7 +179,6 @@ const badmintonGatherBookingService = {
             where: query,
             limit: Number(limit),
             offset,
-            attributes: ["id", "status", "note"],
             order: [["createdAt", "DESC"]],
             raw: true,
             nest: true,
@@ -193,6 +192,13 @@ const badmintonGatherBookingService = {
               model: db.BadmintonGather,
               as: "badmintonGather",
               required: true,
+              include: [
+                {
+                  model: db.User,
+                  as: "user",
+                  attributes: ["fullName", "email", "phoneNumber"],
+                },
+              ],
             },
           ],
           ...option,
