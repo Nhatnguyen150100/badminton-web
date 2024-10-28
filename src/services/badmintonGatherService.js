@@ -10,6 +10,7 @@ import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 import onRemoveParams from "../utils/remove-params";
 import { DEFINE_STATUS } from "../constants/status";
 import groupAndMerge from "../utils/group-item";
+import dayjs from "dayjs";
 
 const badmintonGatherService = {
   createBadmintonGather: (data) => {
@@ -157,11 +158,13 @@ const badmintonGatherService = {
               as: "badmintonGatherComments",
               required: false,
               order: [["order", "ASC"]],
-              include: [{
-                model: db.User,
-                as: "user",
-                required: true,
-              }],
+              include: [
+                {
+                  model: db.User,
+                  as: "user",
+                  required: true,
+                },
+              ],
             },
           ],
           where: { id },
@@ -200,13 +203,33 @@ const badmintonGatherService = {
   getListBadmintonGather: (data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { page, limit, nameLike, district, ward } = data;
+        const {
+          page,
+          limit,
+          nameLike,
+          district,
+          ward,
+          level,
+          price,
+          startTime,
+          sortBy,
+          gender,
+          appointmentDate
+        } = data;
         let offset = page && limit ? (page - 1) * limit : undefined;
         let query = {};
         if (nameLike) {
           query = {
             name: {
               [Op.like]: `%${nameLike}%`,
+            },
+          };
+        }
+        if(appointmentDate) {
+          query = {
+            appointmentDate: {
+              [Op.gte]: dayjs(appointmentDate).startOf("day").toDate(),
+              [Op.lt]: dayjs(appointmentDate).endOf("day").toDate(),
             },
           };
         }
@@ -222,12 +245,73 @@ const badmintonGatherService = {
             ward,
           };
         }
+        if (level) {
+          query = {
+            ...query,
+            level,
+          };
+        }
+        if (price) {
+          query = {
+            ...query,
+            [Op.and]: [
+              { constPerMale: { [Op.lt]: price } },
+              { constPerFemale: { [Op.lt]: price } },
+            ],
+          };
+        }
+        if (startTime) {
+          query = {
+            ...query,
+            startTime: { [Op.like]: startTime.slice(0, 2) + "%" },
+          };
+        }
+        if (sortBy === "appointmentDate") {
+          query = {
+            ...query,
+            appointmentDate: {
+              [Op.gte]: dayjs().startOf("day").toDate(),
+            },
+          };
+        }
+        if (gender) {
+          if (gender === "Male") {
+            query = {
+              ...query,
+              totalFemale: {
+                [Op.eq]: 0,
+              },
+            };
+          } else if (gender === "Female") {
+            query = {
+              ...query,
+              totalMale: {
+                [Op.eq]: 0,
+              },
+            };
+          } else {
+            query = {
+              ...query,
+              totalFemale: {
+                [Op.gt]: 0,
+              },
+              totalMale: {
+                [Op.gt]: 0,
+              },
+            };
+          }
+        }
         const option = onRemoveParams(
           {
             where: query,
             limit: Number(limit),
             offset,
-            order: [["createdAt", "DESC"]],
+            order: [
+              [
+                sortBy ?? "createdAt",
+                sortBy === "appointmentDate" ? "ASC" : "DESC",
+              ],
+            ],
             raw: true,
             nest: true,
             distinct: true,
