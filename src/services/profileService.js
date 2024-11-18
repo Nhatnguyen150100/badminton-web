@@ -2,7 +2,7 @@ const { default: logger } = require("../config/winston");
 const { default: db } = require("../models");
 
 const profileService = {
-  updateProfile: (idUser, fullName, gender, avatar, phoneNumber) => {
+  updateProfile: (idUser, fullName, gender, avatar, phoneNumber, accountBalance) => {
     return new Promise(async (resolve, reject) => {
       try {
         const user = await db.User.findByPk(idUser);
@@ -18,6 +18,7 @@ const profileService = {
             gender,
             avatar: avatar ?? '',
             phoneNumber,
+            accountBalance,
           },
           {
             where: { id: idUser },

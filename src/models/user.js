@@ -64,6 +64,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
+      accountBalance: DataTypes.INTEGER,
       role: DataTypes.STRING,
     },
     {
