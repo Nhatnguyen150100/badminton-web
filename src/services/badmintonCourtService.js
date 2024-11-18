@@ -212,10 +212,13 @@ const badmintonCourtService = {
           raw: true,
           nest: true,
         });
+        const totalCourtNumber = await db.CourtNumber.count({where: {
+          badmintonCourtId: courtId,
+        }})
         if (courts[0]) {
           return resolve(
             new BaseSuccessResponse({
-              data: courts[0],
+              data: {...courts[0], totalCourtNumber},
               message: "Badminton court found successfully",
             })
           );

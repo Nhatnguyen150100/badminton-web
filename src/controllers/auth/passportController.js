@@ -1,4 +1,4 @@
-'use-strict'
+'use strict'
 import passport from 'passport';
 import googleStrategy from 'passport-google-oauth2';
 import authService from '../../services/auth/authService';

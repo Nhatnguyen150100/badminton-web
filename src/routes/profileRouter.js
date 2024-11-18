@@ -1,4 +1,4 @@
-"use-strict";
+"use strict";
 import express from "express";
 import tokenMiddleware from "../middleware/tokenMiddleware";
 import profileController from "../controllers/profileController";
