@@ -7,6 +7,7 @@ import {
   BaseErrorResponse,
   BaseSuccessResponse,
 } from "../../config/baseReponse";
+import generateRandomPassword from '../../utils/generate-password'
 
 const authService = {
   login: (email, password) => {
@@ -39,6 +40,47 @@ const authService = {
             })
           );
         }
+      } catch (error) {
+        logger.error(error.message);
+        reject(
+          new BaseErrorResponse({
+            message: error.message,
+          })
+        );
+      }
+    });
+  },
+  loginByGoogle: (email, name, avatar) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const user = await db.User.findOne({
+          where: { email: email },
+          raw: true,
+        });
+        if (!user || Object.keys(user).length === 0) {
+          const hashedPassword = await bcrypt.hash(generateRandomPassword(8), 10);
+          const newUser = await db.User.create({
+            email,
+            fullName: name,
+            avatar,
+            password: hashedPassword,
+            role: ROLE_DEFINE.USER,
+          });
+          delete newUser.dataValues.password;
+          return resolve(
+            new BaseSuccessResponse({
+              data: newUser.dataValues,
+              message: "Đăng nhập thành công",
+            })
+          );
+        }
+        delete user.password;
+        return resolve(
+          new BaseSuccessResponse({
+            data: user,
+            message: "Đăng nhập thành công",
+          })
+        );
       } catch (error) {
         logger.error(error.message);
         reject(
