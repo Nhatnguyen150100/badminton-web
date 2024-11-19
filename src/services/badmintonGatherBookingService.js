@@ -1,3 +1,4 @@
+import { Sequelize } from "sequelize";
 import {
   BaseErrorResponse,
   BaseResponseList,
@@ -112,10 +113,66 @@ const badmintonGatherBookingService = {
             where: { id: badmintonGather.badmintonGather.id },
           }
         );
+        const userOwnerId = badmintonGather.badmintonGather.userId;
+        const userBookingId = badmintonGather.userId;
+        const constPerMale = badmintonGather.badmintonGather.constPerMale;
+        const constPerFemale = badmintonGather.badmintonGather.constPerFemale;
+        const numberMale = badmintonGather.numberMale;
+        const numberFemale = badmintonGather.numberFemale;
+
+        const totalMoneyHavePay =
+          (numberFemale ?? 0) * (constPerFemale ?? 0) +
+          (numberMale ?? 0) * (constPerMale ?? 0);
+        const userBookingInfo = await db.User.findByPk(userBookingId);
+        if (userBookingInfo.accountBalance < totalMoneyHavePay) {
+          return reject(
+            new BaseErrorResponse({
+              message: "Tài khoản của người đặt không đủ tiền để đăng ký",
+            })
+          );
+        }
+        await db.User.update(
+          {
+            accountBalance: Sequelize.literal(
+              `accountBalance -${totalMoneyHavePay}`
+            ),
+          },
+          {
+            where: {
+              id: userBookingId,
+            },
+          }
+        );
+        await db.User.update(
+          {
+            accountBalance: Sequelize.literal(
+              `accountBalance + ${totalMoneyHavePay * 0.9}`
+            ),
+          },
+          {
+            where: {
+              id: userOwnerId,
+            },
+          }
+        );
+        await db.User.update(
+          {
+            accountBalance: Sequelize.literal(
+              `accountBalance + ${totalMoneyHavePay * 0.1}`
+            ),
+          },
+          {
+            where: {
+              id: "d511aeab-f46d-248c-a29d-55ad1855651a",
+            },
+          }
+        );
         if (updated[0] > 0 && updatedGather[0] > 0) {
           return resolve(
             new BaseSuccessResponse({
-              message: "Chấp nhận thông tin tham gia thành công",
+              message: `Chấp nhận người đặt lịch thành công. Bạn đã nhận được ${(
+                totalMoneyHavePay * 0.9
+              ).toLocaleString()} VND từ người đặt tương ứng 90% giá trị. (Hệ thống nhận chiết khấu 10%)`,
             })
           );
         }

@@ -16,7 +16,6 @@ const badmintonGatherService = {
   createBadmintonGather: (data) => {
     return new Promise(async (resolve, reject) => {
       try {
-        const { userId, scheduleId } = data;
         const created = await db.BadmintonGather.create(onRemoveParams(data));
         if (created) {
           return resolve(

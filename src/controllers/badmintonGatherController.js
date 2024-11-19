@@ -22,7 +22,6 @@ const badmintonGatherController = {
         ward,
         address,
         level,
-        priceNegotiable,
         imgCourt: imgCourtReq
       } = req.body;
       const imgCourt = imgCourtReq ?? req.imgCourt;
@@ -45,7 +44,6 @@ const badmintonGatherController = {
         ward,
         address,
         level,
-        priceNegotiable,
         imgCourt,
       });
       res.status(rs.status).json(rs);
@@ -70,7 +68,6 @@ const badmintonGatherController = {
         totalFemale,
         constPerMale,
         constPerFemale,
-        priceNegotiable,
         district,
         ward,
         address,
@@ -92,7 +89,6 @@ const badmintonGatherController = {
         totalFemale,
         constPerMale,
         constPerFemale,
-        priceNegotiable,
         level,
         district,
         ward,

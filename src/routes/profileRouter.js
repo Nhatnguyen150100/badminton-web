@@ -12,4 +12,12 @@ profileRouter.put(
   profileController.updateProfile
 );
 
+profileRouter.get(
+  "/:id",
+  tokenMiddleware.verifyToken,
+  profileController.getProfile
+);
+
+
+
 export default profileRouter;

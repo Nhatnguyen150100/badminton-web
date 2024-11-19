@@ -1,4 +1,4 @@
-import { Op } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 import logger from "../config/winston";
 import { DEFINE_SCHEDULE_STATUS, DEFINE_STATUS } from "../constants/status";
 import db from "../models";
@@ -57,11 +57,11 @@ const userBookingService = {
         let query = {
           userId,
           appointmentDate,
-          status
+          status,
         };
         const option = onRemoveParams(
           {
-            where:  onRemoveParams(query, [0]),
+            where: onRemoveParams(query, [0]),
             attributes: ["id", "status", "note"],
             limit: Number(limit),
             offset,
@@ -240,10 +240,59 @@ const userBookingService = {
             },
           }
         );
+        const updatedSchedule = await db.Schedule.findOne({
+          where: {
+            id: currentStatus.scheduleId,
+          },
+        });
+        const { userId } = await db.BadmintonCourt.findOne({
+          where: {
+            id: updatedSchedule.badmintonCourtId,
+          },
+          attributes: ["userId"],
+        });
+        const constBooking = updatedSchedule.constBooking;
+        const userBookId = currentStatus.userId;
+        await db.User.update(
+          {
+            accountBalance: Sequelize.literal(
+              `accountBalance -${constBooking}`
+            ),
+          },
+          {
+            where: {
+              id: userBookId,
+            },
+          }
+        );
+        await db.User.update(
+          {
+            accountBalance: Sequelize.literal(
+              `accountBalance -${constBooking* 0.9}`
+            ),
+          },
+          {
+            where: {
+              id: userId,
+            },
+          }
+        );
+        await db.User.update(
+          {
+            accountBalance: Sequelize.literal(
+              `accountBalance -${constBooking* 0.1}`
+            ),
+          },
+          {
+            where: {
+              id: "d511aeab-f46d-248c-a29d-55ad1855651a",
+            },
+          }
+        );
         if (updatedStatus) {
           return resolve(
             new BaseSuccessResponse({
-              message: "Chấp nhận người đặt lịch thành công",
+              message: `Chấp nhận người đặt lịch thành công. Bạn đã nhận được ${(constBooking*0.9).toLocaleString()} VND từ người đặt tương ứng 90% giá trị. (Hệ thống nhận chiết khấu 10%)`,
             })
           );
         }

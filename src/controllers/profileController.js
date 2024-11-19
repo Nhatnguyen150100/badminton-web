@@ -7,7 +7,7 @@ const profileController = {
       const avatar = req.avatar;
       const { id } = req.params;
       const { fullName, gender, phoneNumber, accountBalance } = req.body;
-      const { data, message } = await profileService.updateProfile(
+      const rs = await profileService.updateProfile(
         id,
         fullName,
         gender,
@@ -15,13 +15,20 @@ const profileController = {
         phoneNumber,
         accountBalance
       );
-      if (!data) {
-        return res.status(400).json({ message });
-      }
-      res.status(200).json({ data, message });
+      res.status(rs.status).json(rs);
     } catch (error) {
       logger.error(error.message);
-      res.status(500).json({ message: "server error" });
+      res.status(error.status).json(rs.message);
+    }
+  },
+  getProfile: async (req, res) => {
+    try {
+      const { id } = req.params;
+      const rs = await profileService.getProfile(id);
+      res.status(rs.status).json(rs);
+    } catch (error) {
+      logger.error(error.message);
+      res.status(error.status).json(rs.message);
     }
   },
 };
