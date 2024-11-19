@@ -253,6 +253,14 @@ const userBookingService = {
         });
         const constBooking = updatedSchedule.constBooking;
         const userBookId = currentStatus.userId;
+        const userBookingInfo = await db.User.findByPk(userBookId);
+        if (userBookingInfo.accountBalance < constBooking) {
+          return reject(
+            new BaseErrorResponse({
+              message: "Tài khoản của người đặt không đủ tiền để đăng ký",
+            })
+          );
+        }
         await db.User.update(
           {
             accountBalance: Sequelize.literal(
