@@ -276,7 +276,7 @@ const userBookingService = {
         await db.User.update(
           {
             accountBalance: Sequelize.literal(
-              `accountBalance -${constBooking* 0.9}`
+              `accountBalance + ${constBooking* 0.9}`
             ),
           },
           {
@@ -288,7 +288,7 @@ const userBookingService = {
         await db.User.update(
           {
             accountBalance: Sequelize.literal(
-              `accountBalance -${constBooking* 0.1}`
+              `accountBalance + ${constBooking* 0.1}`
             ),
           },
           {
