@@ -13,15 +13,17 @@ import { DEFINE_STATUS_RESPONSE } from "../config/statusResponse";
 dayjs.extend(customParseFormat);
 
 const scheduleService = {
-  checkScheduleExist: (courtNumberId, timeBookingId) => {
+  checkScheduleExist: (courtNumberId, timeBookingId, appointmentDate) => {
     return new Promise(async (resolve, reject) => {
       try {
         const exitsSchedule = await db.Schedule.findOne({
           where: {
             courtNumberId,
             timeBookingId,
+            appointmentDate
           },
         });
+        console.log("🚀 ~ returnnewPromise ~ exitsSchedule:", exitsSchedule)
         if (exitsSchedule) {
           resolve(true);
           return;
@@ -48,7 +50,8 @@ const scheduleService = {
       try {
         const isExist = await scheduleService.checkScheduleExist(
           courtNumberId,
-          timeBookingId
+          timeBookingId,
+          appointmentDate
         );
         if (isExist) {
           return reject(
@@ -99,7 +102,8 @@ const scheduleService = {
       try {
         const isExist = await scheduleService.checkScheduleExist(
           courtNumberId,
-          timeBookingId
+          timeBookingId,
+          appointmentDate
         );
         if (!isExist) {
           return reject(
