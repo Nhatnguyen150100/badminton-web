@@ -23,7 +23,6 @@ const scheduleService = {
             appointmentDate
           },
         });
-        console.log("🚀 ~ returnnewPromise ~ exitsSchedule:", exitsSchedule)
         if (exitsSchedule) {
           resolve(true);
           return;
